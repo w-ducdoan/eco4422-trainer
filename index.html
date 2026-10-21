@@ -1,0 +1,1802 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="ECO 4422 Exam 1 practice: lessons, drills in RATS format, mock exams and progress tracking.">
+<title>ECO 4422 Exam 1 Trainer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f3ec;--surface:#fffdf7;--surface2:#f0ede3;--ink:#1c2420;--muted:#5b645e;--line:#dcd7c9;
+  --accent:#006747;--accent-ink:#ffffff;--accent-soft:#e2efe8;--gold:#8a7a2e;--gold-soft:#f3edd2;
+  --good:#1d7a4a;--good-soft:#e3f2e8;--bad:#b0362a;--bad-soft:#f8e6e2;--mid:#9a6a00;--mid-soft:#f7edd5;
+  --chart-ink:#1c2420;--chart-2:#006747;--chart-3:#7a5b00;--chart-pacf:#9aa59e;--chart-grid:#e7e3d7;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;--sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111513;--surface:#181d1a;--surface2:#1f2521;--ink:#e6eae6;--muted:#9ba49e;--line:#2d3530;
+  --accent:#43b083;--accent-ink:#08130e;--accent-soft:#1b2e25;--gold:#d6c477;--gold-soft:#2a2717;
+  --good:#5ccb8f;--good-soft:#16291f;--bad:#f0897c;--bad-soft:#331d1a;--mid:#e3b44d;--mid-soft:#2e2715;
+  --chart-ink:#dfe5e0;--chart-2:#43b083;--chart-3:#e3b44d;--chart-pacf:#6c7a72;--chart-grid:#252c28;color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --bg:#111513;--surface:#181d1a;--surface2:#1f2521;--ink:#e6eae6;--muted:#9ba49e;--line:#2d3530;
+  --accent:#43b083;--accent-ink:#08130e;--accent-soft:#1b2e25;--gold:#d6c477;--gold-soft:#2a2717;
+  --good:#5ccb8f;--good-soft:#16291f;--bad:#f0897c;--bad-soft:#331d1a;--mid:#e3b44d;--mid-soft:#2e2715;
+  --chart-ink:#dfe5e0;--chart-2:#43b083;--chart-3:#e3b44d;--chart-pacf:#6c7a72;--chart-grid:#252c28;color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.55;-webkit-font-smoothing:antialiased}
+#app{max-width:980px;margin:0 auto;padding:12px max(16px,env(safe-area-inset-right,0px)) 80px max(16px,env(safe-area-inset-left,0px))}
+h1{font-size:1.6rem;line-height:1.2;margin:.2em 0 .4em;letter-spacing:-.01em}
+h2{font-size:1.1rem;margin:1.6em 0 .6em}
+h3{font-size:1.05rem;margin:1.4em 0 .4em}
+p{margin:.5em 0}
+code{font-family:var(--mono);font-size:.9em;background:var(--surface2);padding:.05em .3em;border-radius:4px}
+.muted{color:var(--muted)}.small{font-size:.88rem}
+button{font:inherit;color:inherit}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:8px;padding:.55em 1em;font-weight:600;cursor:pointer;min-height:40px}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--accent);border:1.5px solid var(--accent)}
+.btn.sm{padding:.25em .7em;min-height:32px;font-size:.88rem}
+.btn.big{font-size:1.05rem;padding:.75em 1.4em}
+.link{background:none;border:0;color:var(--accent);cursor:pointer;padding:0;font-weight:600}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:2px}
+
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:6px 0 10px}
+.brand{display:flex;gap:12px;align-items:center}
+.mark{width:40px;height:40px;border-radius:10px;background:var(--accent);color:var(--accent-ink);display:grid;place-items:center;font-family:var(--mono);font-size:22px;font-weight:600}
+.bt{font-weight:700;font-size:1.05rem}.bs{font-size:.85rem;color:var(--muted)}
+.sync{font-size:.8rem;color:var(--muted);border:1px solid var(--line);border-radius:99px;padding:.2em .7em}
+.sync[data-state="synced"]{color:var(--good);border-color:var(--good)}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:1px solid var(--line);margin-bottom:18px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{background:none;border:0;padding:.7em .9em;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap}
+.tab.on{color:var(--ink);border-bottom-color:var(--accent)}
+
+.hero{display:flex;gap:24px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:20px}
+.ring{width:140px;height:140px;flex:none}
+.rbg{fill:none;stroke:var(--surface2);stroke-width:12}.rfg{fill:none;stroke:var(--accent);stroke-width:12;stroke-linecap:round}
+.rv{font-size:28px;font-weight:700;fill:var(--ink);font-family:var(--sans)}.rl{font-size:12px;fill:var(--muted);font-family:var(--sans);text-transform:uppercase;letter-spacing:.08em}
+.stats{display:flex;gap:22px;flex-wrap:wrap;margin-top:10px}
+.stats div{display:flex;flex-direction:column}.stats b{font-size:1.3rem}.stats span{font-size:.82rem;color:var(--muted)}
+.nextgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.nextcard{background:var(--surface);border:1px solid var(--line);border-left:4px solid var(--gold);border-radius:10px;padding:14px;display:flex;flex-direction:column;gap:8px;align-items:flex-start}
+.nk{font-weight:700}
+.sklist{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:6px 14px}
+.skrow{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(60px,1.4fr) 44px auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+.skrow:last-child{border-bottom:0}
+.skn{min-width:0}.sks{font-size:.8rem}.skp{font-variant-numeric:tabular-nums;text-align:right;font-weight:600}
+.bar{display:block;height:9px;background:var(--surface2);border-radius:99px;overflow:hidden}
+.bar>span{display:block;height:100%;border-radius:99px;background:var(--muted)}
+.bar.inline{display:inline-block;width:110px;vertical-align:middle;margin-right:6px}
+.lv-solid{color:var(--good)}.bar>.lv-solid{background:var(--good)}
+.lv-mid{color:var(--mid)}.bar>.lv-mid{background:var(--mid)}
+.lv-weak{color:var(--bad)}.bar>.lv-weak{background:var(--bad)}
+.lv-new{color:var(--muted)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.mocklist{list-style:none;padding:0;margin:0 0 12px}.mocklist li{display:flex;gap:12px;padding:6px 0;border-bottom:1px solid var(--line)}.mocklist li b{margin-left:auto}
+.facts{padding-left:1.1em}.facts li{margin:.3em 0}
+
+.lessonlist{list-style:none;padding:0;display:grid;gap:8px}
+.lessonbtn{width:100%;display:grid;grid-template-columns:90px 1fr auto;gap:12px;align-items:center;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer}
+.lessonbtn:hover{border-color:var(--accent)}
+.ld{font-family:var(--mono);font-size:.82rem;color:var(--muted)}.lt{font-weight:600}
+.lk{font-size:.85rem;color:var(--accent);font-weight:600}.lk.done{color:var(--good)}
+.crumbs{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-bottom:10px;font-size:.92rem}
+.lesson{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.lesson h3{color:var(--accent);font-size:1rem;text-transform:uppercase;letter-spacing:.06em}
+.lesson dfn{font-style:normal;font-weight:700;background:var(--gold-soft);padding:0 .2em;border-radius:3px}
+.take{background:var(--accent-soft);border-radius:10px;padding:12px 14px;font-weight:600;margin:10px 0 6px}
+.take span{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:2px}
+.eq{font-family:var(--mono);font-size:.92em;background:var(--surface2);padding:.1em .4em;border-radius:5px;white-space:normal}
+.warn{background:var(--mid-soft);border-left:4px solid var(--mid);padding:8px 12px;border-radius:6px}
+.cap{font-size:.85rem;color:var(--muted);margin-top:4px}
+table.mini{border-collapse:collapse;width:100%;font-size:.9rem;margin:8px 0;display:block;overflow-x:auto}
+table.mini th,table.mini td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left;vertical-align:top}
+table.mini th{font-size:.8rem;color:var(--muted);font-weight:600}
+table.res{display:table}
+
+.fig{margin:12px 0}
+.figrow2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.figrow3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.figrow{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px}
+.figpair{display:grid;gap:4px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px}
+.figlbl{font-weight:600;font-size:.9rem;padding:2px 4px}
+.imgpair{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+svg.chart{width:100%;height:auto;display:block}
+.chart .frame{fill:none;stroke:var(--line)}
+.chart .grid{stroke:var(--chart-grid)}
+.chart .zero{stroke:var(--muted);stroke-width:1}
+.chart .tick{fill:var(--muted);font:11px var(--sans)}
+.chart .ttl{fill:var(--ink);font:600 13px var(--sans)}
+.chart .anno{fill:var(--ink);font:12px var(--sans)}
+.chart .l1{fill:none;stroke:var(--chart-ink);stroke-width:1.4}
+.chart .l2{fill:none;stroke:var(--chart-2);stroke-width:2;stroke-dasharray:5 3}
+.chart .l2s{stroke:var(--chart-2);stroke-width:2.2}
+.chart .l3{fill:none;stroke:var(--chart-3);stroke-width:1.3}
+.chart .l4{fill:none;stroke:var(--chart-3);stroke-width:2}
+.chart .legend text{fill:var(--ink);font:11px var(--sans)}
+.chart .legbox{fill:var(--surface);stroke:var(--line)}
+.chart .acfb{fill:var(--chart-ink)}
+.chart .pacfb{fill:var(--chart-pacf)}
+.chart .barB{fill:var(--chart-2)}
+.chart .band{fill:none;stroke:var(--chart-2);stroke-width:1.5}
+.chart .dot{fill:var(--chart-ink);opacity:.75}.chart .dotk{fill:var(--chart-3)}
+.chart .resid{stroke:var(--chart-3);stroke-width:2;stroke-dasharray:4 3}
+.chart .thermo{fill:var(--surface2)}.chart .thermo-ok{fill:var(--good)}.chart .thermo-hot{fill:var(--bad)}.chart .cut{stroke:var(--ink);stroke-width:2}
+.bj{background:var(--surface);border:1px solid var(--line);border-radius:8px}
+figure.scan{margin:8px 0;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px}
+figure.scan img{width:100%;height:auto;display:block}
+figure.scan figcaption{font-size:.8rem;color:#555;padding:4px 2px 0}
+.lagline{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.lagcell{border:1.5px solid var(--line);border-radius:10px;padding:10px 14px;text-align:center;min-width:90px;background:var(--surface)}
+.lagcell b{display:block;font-family:var(--mono)}.lagcell span{font-size:.82rem;color:var(--muted);font-family:var(--mono)}
+.lagcell.now{border-color:var(--accent);background:var(--accent-soft)}
+
+.drillgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:12px}
+.drillcard{display:flex;flex-direction:column;gap:8px;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;cursor:pointer;min-height:130px}
+.drillcard:hover{border-color:var(--accent)}
+.dsub{font-size:.78rem;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}.dname{font-weight:700;font-size:1.02rem;flex:1}.dlv{font-size:.82rem}
+
+.qcard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin:16px 0}
+.qref{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--gold);font-weight:600}
+.qhead h3{margin:.15em 0 .3em;font-size:1.15rem}
+.stem{color:var(--ink)}
+pre.rats{font-family:var(--mono);font-size:12.5px;line-height:1.45;background:var(--surface2);border:1px solid var(--line);border-radius:8px;padding:12px;overflow-x:auto;white-space:pre;margin:10px 0}
+.exh{margin:10px 0}
+.parts{display:grid;gap:14px;margin-top:14px}
+.part{border-top:1px dashed var(--line);padding-top:12px}
+.pq{display:flex;gap:10px;align-items:flex-start;margin-bottom:8px}
+.pq>div{min-width:0}
+.plabel{flex:none;font-family:var(--mono);font-size:.8rem;background:var(--accent);color:var(--accent-ink);border-radius:6px;padding:.1em .45em;margin-top:.15em}
+.opts{display:grid;gap:6px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;background:var(--bg);border:1.5px solid var(--line);border-radius:9px;padding:9px 12px;cursor:pointer;line-height:1.4}
+.opt:hover:not(:disabled){border-color:var(--accent)}
+.opt .dotsel{flex:none;width:16px;height:16px;border-radius:50%;border:2px solid var(--muted);margin-top:2px}
+.opt.sel{border-color:var(--accent);background:var(--accent-soft)}.opt.sel .dotsel{border-color:var(--accent);background:var(--accent);box-shadow:inset 0 0 0 3px var(--surface)}
+.opt.right{border-color:var(--good);background:var(--good-soft)}.opt.right .dotsel{border-color:var(--good)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-soft)}
+.opt:disabled{cursor:default;color:var(--ink)}
+.numrow{display:flex;gap:8px;align-items:center}
+input.num{font:inherit;font-family:var(--mono);width:220px;max-width:100%;padding:.5em .7em;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+input.num.right{border-color:var(--good)}input.num.wrong{border-color:var(--bad)}
+textarea.txt{font:inherit;width:100%;padding:.6em .8em;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);resize:vertical}
+.fb{margin-top:8px;padding:10px 12px;border-radius:8px;font-size:.94rem}
+.fb.ok{background:var(--good-soft);border-left:4px solid var(--good)}
+.fb.no{background:var(--bad-soft);border-left:4px solid var(--bad)}
+.fb.mid{background:var(--mid-soft);border-left:4px solid var(--mid)}
+.fb.wait{background:var(--surface2)}
+.fb p{margin:.3em 0}
+.keypts{margin-top:8px;background:var(--surface2);border-radius:8px;padding:8px 12px}
+.kh{font-size:.82rem;color:var(--muted);font-weight:600;margin-bottom:4px}
+.kp{display:flex;gap:8px;align-items:flex-start;padding:3px 0;font-size:.93rem;cursor:pointer}
+.kp input{margin-top:.3em;accent-color:var(--accent)}
+details.model{margin-top:8px}details.model summary{cursor:pointer;font-weight:600;color:var(--accent)}
+.qfoot{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.ask{margin-top:12px;border-top:1px solid var(--line);padding-top:12px}
+.askrow{display:flex;gap:8px;flex-wrap:wrap}
+.askin{flex:1;min-width:180px;font:inherit;padding:.5em .7em;border:1.5px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
+.askout{margin-top:8px}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;vertical-align:-2px}
+@keyframes sp{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.spin{animation:none}}
+
+.mockintro{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px}
+.mocklist2{padding-left:1.2em}.mocklist2 li{margin:.35em 0}
+.mockbar{position:sticky;top:0;z-index:5;display:flex;gap:14px;align-items:center;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px;box-shadow:0 4px 16px rgba(0,0,0,.06)}
+.mockbar .btn{margin-left:auto}
+#timer{font-family:var(--mono);font-weight:600;font-size:1.05rem}#timer.low{color:var(--bad)}
+.results{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:10px}
+.resgrid{display:flex;gap:20px;align-items:flex-start}
+
+@media (max-width:720px){
+  .hero{flex-direction:column;align-items:flex-start}
+  .two,.figrow2,.imgpair{grid-template-columns:1fr}
+  .figrow3{grid-template-columns:1fr}
+  .skrow{grid-template-columns:minmax(0,1fr) 60px auto;}
+  .skrow .bar{grid-column:1/-1;grid-row:2}
+  .lessonbtn{grid-template-columns:1fr auto}.ld{grid-column:1/-1}
+  .resgrid{flex-direction:column}
+  .qcard,.lesson{padding:14px}
+  h1{font-size:1.35rem}
+}
+
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+const IMG={};
+
+/* ===== ENGINE: random numbers, OLS, distributions, ACF/PACF, RATS formatting, SVG charts ===== */
+const E = (() => {
+  // ---------- seeded RNG ----------
+  function rng(seed) {
+    let a = (seed >>> 0) || 1;
+    const u = () => { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+    let spare = null;
+    const n = () => { if (spare !== null) { const s = spare; spare = null; return s; } let x, y, r; do { x = 2 * u() - 1; y = 2 * u() - 1; r = x * x + y * y; } while (r === 0 || r >= 1); const m = Math.sqrt(-2 * Math.log(r) / r); spare = y * m; return x * m; };
+    return {
+      u, n,
+      range: (lo, hi) => lo + (hi - lo) * u(),
+      int: (lo, hi) => lo + Math.floor(u() * (hi - lo + 1)),
+      pick: arr => arr[Math.floor(u() * arr.length)],
+      chance: p => u() < p,
+      shuffle: arr => { const b = arr.slice(); for (let i = b.length - 1; i > 0; i--) { const j = Math.floor(u() * (i + 1)); [b[i], b[j]] = [b[j], b[i]]; } return b; },
+      sign: () => (u() < 0.5 ? -1 : 1)
+    };
+  }
+  const newSeed = () => (Math.floor(Math.random() * 2 ** 31) ^ Date.now()) >>> 0;
+
+  // ---------- special functions ----------
+  function lgamma(x) {
+    const c = [76.18009172947146, -86.50532032941677, 24.01409824083091, -1.231739572450155, 0.1208650973866179e-2, -0.5395239384953e-5];
+    let y = x, tmp = x + 5.5; tmp -= (x + 0.5) * Math.log(tmp);
+    let ser = 1.000000000190015; for (let j = 0; j < 6; j++) ser += c[j] / ++y;
+    return -tmp + Math.log(2.5066282746310005 * ser / x);
+  }
+  function betacf(a, b, x) {
+    const MAXIT = 300, EPS = 3e-14, FPMIN = 1e-300;
+    let qab = a + b, qap = a + 1, qam = a - 1, c = 1, d = 1 - qab * x / qap;
+    if (Math.abs(d) < FPMIN) d = FPMIN; d = 1 / d; let h = d;
+    for (let m = 1; m <= MAXIT; m++) {
+      const m2 = 2 * m; let aa = m * (b - m) * x / ((qam + m2) * (a + m2));
+      d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN; c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN; d = 1 / d; h *= d * c;
+      aa = -(a + m) * (qab + m) * x / ((a + m2) * (qap + m2));
+      d = 1 + aa * d; if (Math.abs(d) < FPMIN) d = FPMIN; c = 1 + aa / c; if (Math.abs(c) < FPMIN) c = FPMIN; d = 1 / d;
+      const del = d * c; h *= del; if (Math.abs(del - 1) < EPS) break;
+    }
+    return h;
+  }
+  function ibeta(a, b, x) { // regularized incomplete beta I_x(a,b)
+    if (x <= 0) return 0; if (x >= 1) return 1;
+    const bt = Math.exp(lgamma(a + b) - lgamma(a) - lgamma(b) + a * Math.log(x) + b * Math.log(1 - x));
+    return x < (a + 1) / (a + b + 2) ? bt * betacf(a, b, x) / a : 1 - bt * betacf(b, a, 1 - x) / b;
+  }
+  function gammaQ(a, x) { // regularized upper incomplete gamma
+    if (x <= 0) return 1;
+    if (x < a + 1) { let sum = 1 / a, del = sum, ap = a; for (let n = 0; n < 500; n++) { ap++; del *= x / ap; sum += del; if (Math.abs(del) < Math.abs(sum) * 1e-15) break; } return 1 - sum * Math.exp(-x + a * Math.log(x) - lgamma(a)); }
+    let b = x + 1 - a, c = 1e300, d = 1 / b, h = d;
+    for (let i = 1; i < 500; i++) { const an = -i * (i - a); b += 2; d = an * d + b; if (Math.abs(d) < 1e-300) d = 1e-300; c = b + an / c; if (Math.abs(c) < 1e-300) c = 1e-300; d = 1 / d; const del = d * c; h *= del; if (Math.abs(del - 1) < 1e-15) break; }
+    return Math.exp(-x + a * Math.log(x) - lgamma(a)) * h;
+  }
+  const tTwoSided = (t, df) => ibeta(df / 2, 0.5, df / (df + t * t));
+  const fSurv = (F, d1, d2) => (F <= 0 ? 1 : ibeta(d2 / 2, d1 / 2, d2 / (d2 + d1 * F)));
+  const chiSurv = (x, k) => gammaQ(k / 2, x / 2);
+  const normTwoSided = z => chiSurv(z * z, 1);
+
+  // ---------- linear algebra / OLS ----------
+  function inv(M) {
+    const n = M.length, A = M.map((r, i) => r.concat(Array.from({ length: n }, (_, j) => (i === j ? 1 : 0))));
+    for (let c = 0; c < n; c++) {
+      let p = c; for (let r = c + 1; r < n; r++) if (Math.abs(A[r][c]) > Math.abs(A[p][c])) p = r;
+      [A[c], A[p]] = [A[p], A[c]]; const pv = A[c][c]; if (Math.abs(pv) < 1e-300) throw new Error('singular');
+      for (let j = 0; j < 2 * n; j++) A[c][j] /= pv;
+      for (let r = 0; r < n; r++) if (r !== c) { const f = A[r][c]; if (f) for (let j = 0; j < 2 * n; j++) A[r][j] -= f * A[c][j]; }
+    }
+    return A.map(r => r.slice(n));
+  }
+  // X: array of columns (each length T); names: column names; y: array
+  function ols(y, cols, names, opts = {}) {
+    const T = y.length, K = cols.length;
+    // scale columns for numerical stability
+    const sc = cols.map(c => Math.max(1e-12, Math.sqrt(c.reduce((s, v) => s + v * v, 0) / T)));
+    const Z = cols.map((c, k) => c.map(v => v / sc[k]));
+    const XtX = Z.map(a => Z.map(b => { let s = 0; for (let t = 0; t < T; t++) s += a[t] * b[t]; return s; }));
+    const Xty = Z.map(a => { let s = 0; for (let t = 0; t < T; t++) s += a[t] * y[t]; return s; });
+    const Ai = inv(XtX);
+    const bz = Ai.map(r => r.reduce((s, v, j) => s + v * Xty[j], 0));
+    const b = bz.map((v, k) => v / sc[k]);
+    const fit = y.map((_, t) => cols.reduce((s, c, k) => s + c[t] * b[k], 0));
+    const e = y.map((v, t) => v - fit[t]);
+    const ssr = e.reduce((s, v) => s + v * v, 0);
+    const ybar = y.reduce((s, v) => s + v, 0) / T;
+    const sst = y.reduce((s, v) => s + (v - ybar) ** 2, 0);
+    const s2 = ssr / (T - K);
+    const se = Ai.map((r, k) => Math.sqrt(r[k] * s2) / sc[k]);
+    const tstat = b.map((v, k) => v / se[k]);
+    const pval = tstat.map(t => tTwoSided(t, T - K));
+    const r2 = 1 - ssr / sst;
+    const rbar2 = 1 - (1 - r2) * (T - 1) / (T - K);
+    const ur2 = 1 - ssr / y.reduce((s, v) => s + v * v, 0);
+    let dwn = 0; for (let t = 1; t < T; t++) dwn += (e[t] - e[t - 1]) ** 2;
+    const F = K > 1 ? (r2 / (K - 1)) / ((1 - r2) / (T - K)) : NaN;
+    return {
+      T, K, names, b, se, t: tstat, p: pval, fit, e, ssr, ybar, sst, r2, rbar2, ur2,
+      sedep: Math.sqrt(sst / (T - 1)), see: Math.sqrt(s2), dw: dwn / ssr, F, Fp: K > 1 ? fSurv(F, K - 1, T - K) : NaN,
+      logl: -T / 2 * (1 + Math.log(2 * Math.PI) + Math.log(ssr / T)),
+      aic: Math.log(ssr / T) + 2 * K / T, sbc: Math.log(ssr / T) + K * Math.log(T) / T, dep: opts.dep || 'Y'
+    };
+  }
+
+  // ---------- time series tools ----------
+  const mean = a => a.reduce((s, v) => s + v, 0) / a.length;
+  function acf(y, nlags) {
+    const T = y.length, m = mean(y), d = y.map(v => v - m), c0 = d.reduce((s, v) => s + v * v, 0);
+    const r = []; for (let k = 1; k <= nlags; k++) { let s = 0; for (let t = k; t < T; t++) s += d[t] * d[t - k]; r.push(s / c0); }
+    return r; // r[0] = lag 1
+  }
+  function pacf(r) { // Durbin-Levinson from autocorrelations r[0]=lag1
+    const n = r.length, out = []; let phi = [];
+    for (let k = 1; k <= n; k++) {
+      let num = r[k - 1], den = 1;
+      for (let j = 1; j < k; j++) { num -= phi[j - 1] * r[k - j - 1]; den -= phi[j - 1] * r[j - 1]; }
+      const pkk = num / den, nphi = [];
+      for (let j = 1; j < k; j++) nphi.push(phi[j - 1] - pkk * phi[k - j - 1]);
+      nphi.push(pkk); phi = nphi; out.push(pkk);
+    }
+    return out;
+  }
+  const ljungBox = (r, T, m) => { let s = 0; for (let k = 1; k <= m; k++) s += r[k - 1] ** 2 / (T - k); return T * (T + 2) * s; };
+  const boxPierce = (r, T, m) => T * r.slice(0, m).reduce((s, v) => s + v * v, 0);
+  function moments(y) {
+    const T = y.length, m = mean(y), d = y.map(v => v - m);
+    const m2 = d.reduce((s, v) => s + v * v, 0) / T, m3 = d.reduce((s, v) => s + v ** 3, 0) / T, m4 = d.reduce((s, v) => s + v ** 4, 0) / T;
+    const variance = m2 * T / (T - 1);
+    return { T, mean: m, variance, sd: Math.sqrt(variance), skew: m3 / m2 ** 1.5, exkurt: m4 / (m2 * m2) - 3 };
+  }
+  const jb = (T, S, K) => T / 6 * (S * S + K * K / 4);
+  function arma(rg, T, phi = [], theta = [], sigma = 1, burn = 200) {
+    const N = T + burn, y = new Array(N).fill(0), e = Array.from({ length: N }, () => rg.n() * sigma);
+    for (let t = 0; t < N; t++) {
+      let v = e[t];
+      phi.forEach((p, i) => { if (t - i - 1 >= 0) v += p * y[t - i - 1]; });
+      theta.forEach((q, i) => { if (t - i - 1 >= 0) v += q * e[t - i - 1]; });
+      y[t] = v;
+    }
+    return y.slice(burn);
+  }
+
+  // ---------- dates / formatting ----------
+  const MON = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+  const ym = (y0, idx) => ({ y: y0 + Math.floor(idx / 12), m: idx % 12 }); // idx 0-based from Jan y0
+  const rDate = (y0, idx) => { const d = ym(y0, idx); return d.y + ':' + String(d.m + 1).padStart(2, '0'); };
+  const pad = (s, w, left = true) => { s = String(s); return s.length >= w ? s : (left ? ' '.repeat(w - s.length) + s : s + ' '.repeat(w - s.length)); };
+  function sig(v, digs = 7) { // RATS-like significant digits
+    if (!isFinite(v)) return 'NA';
+    if (v === 0) return '0.000000';
+    const a = Math.abs(v); const d = Math.max(0, digs - 1 - Math.floor(Math.log10(a)));
+    return v.toFixed(Math.min(d, 9));
+  }
+  const fx = (v, d) => (isFinite(v) ? v.toFixed(d) : 'NA');
+  const pstr = p => (p < 5e-9 ? '0.00000000' : p.toFixed(8));
+  const comma = (v, d = 2) => Number(v).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  const round = (v, d) => { const f = 10 ** d; return Math.round(v * f) / f; };
+
+  // RATS LINREG printout. o = ols result, meta {dep, y0, start idx 0, header lines}
+  function linregText(o, meta) {
+    const L = [];
+    if (meta.cmd !== false) { L.push('LINREG ' + o.dep); L.push('# ' + o.names.join(' ')); L.push(''); }
+    if (meta.full !== false) {
+      L.push('Linear Regression - Estimation by Least Squares');
+      L.push('Dependent Variable ' + o.dep);
+      L.push('Monthly Data From ' + rDate(meta.y0, 0) + ' To ' + rDate(meta.y0, o.T - 1));
+    }
+    const row = (k, v) => L.push(pad(k, 32, false) + pad(v, 18));
+    row('Usable Observations', o.T);
+    row('Degrees of Freedom', o.T - o.K);
+    row('Centered R^2', fx(o.r2, 7));
+    row('R-Bar^2', fx(o.rbar2, 7));
+    if (meta.full !== false) row('Uncentered R^2', fx(o.ur2, 7));
+    row('Mean of Dependent Variable', sig(o.ybar, 11));
+    row('Std Error of Dependent Variable', sig(o.sedep, 10));
+    row('Standard Error of Estimate', sig(o.see, 10));
+    if (meta.full !== false) row('Sum of Squared Residuals', sig(o.ssr, 10));
+    if (o.K > 1) { row('Regression F(' + (o.K - 1) + ',' + (o.T - o.K) + ')', fx(o.F, 4)); row('Significance Level of F', fx(o.Fp, 7)); }
+    if (meta.full !== false) row('Log Likelihood', fx(o.logl, 4));
+    row('Durbin-Watson Statistic', fx(o.dw, 4));
+    L.push('');
+    L.push('    Variable' + pad('Coeff', 22) + pad('Std Error', 16) + pad('T-Stat', 13) + pad('Signif', 13));
+    L.push('*'.repeat(76));
+    o.names.forEach((nm, k) => {
+      const dec = meta.dec && meta.dec[nm] !== undefined ? meta.dec[nm] : null;
+      const cs = dec !== null ? o.b[k].toFixed(dec) : sig(o.b[k], 10);
+      const ss = dec !== null ? o.se[k].toFixed(Math.max(dec, 6)) : sig(o.se[k], 9);
+      L.push(pad((k + 1) + '.', 4, false) + pad(nm, 10, false) + pad(cs, 20) + pad(ss, 16) + pad(fx(o.t[k], 5), 13) + pad(pstr(o.p[k]), 13));
+    });
+    if (meta.crits) { L.push(''); L.push('@regcrits'); L.push(pad('AIC', 12, false) + fx(o.aic, 3)); L.push(pad('SBC', 12, false) + fx(o.sbc, 3)); }
+    return L.join('\n');
+  }
+
+  // ---------- SVG charts ----------
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  function niceTicks(lo, hi, n = 5) {
+    const span = hi - lo || 1, step0 = span / n, mag = 10 ** Math.floor(Math.log10(step0));
+    const step = [1, 2, 2.5, 5, 10].map(s => s * mag).find(s => span / s <= n) || 10 * mag;
+    const t = []; for (let v = Math.ceil(lo / step) * step; v <= hi + 1e-9; v += step) t.push(+v.toFixed(10));
+    return t;
+  }
+  const tickLabel = v => (Math.abs(v) >= 1000 ? comma(v, 0) : (Math.abs(v) < 1 && v !== 0 ? String(+v.toFixed(2)) : String(+v.toFixed(2))));
+
+  // bjident-style ACF/PACF chart. r: acf lags1..n, p: pacf lags1..n, T
+  function bjident(r, p, T, title) {
+    const W = 640, H = 360, ml = 46, mr = 14, mt = 34, mb = 30, n = r.length;
+    const iw = W - ml - mr, ih = H - mt - mb;
+    const X = k => ml + (k + 0.5) * iw / (n + 1), Y = v => mt + (1 - v) / 2 * ih, bw = iw / (n + 1) * 0.42;
+    let s = `<svg class="chart bj" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title)}: autocorrelation and partial autocorrelation bars">`;
+    s += `<text class="ttl" x="${W / 2}" y="20" text-anchor="middle">${esc(title)}</text>`;
+    s += `<rect class="frame" x="${ml}" y="${mt}" width="${iw}" height="${ih}"/>`;
+    [-1, -0.75, -0.5, -0.25, 0, 0.25, 0.5, 0.75, 1].forEach(v => { s += `<text class="tick" x="${ml - 6}" y="${Y(v) + 4}" text-anchor="end">${v.toFixed(2)}</text>`; });
+    s += `<line class="zero" x1="${ml}" x2="${ml + iw}" y1="${Y(0)}" y2="${Y(0)}"/>`;
+    for (let k = 0; k <= n; k += 5) s += `<text class="tick" x="${X(k)}" y="${H - 10}" text-anchor="middle">${k}</text>`;
+    // bars: lag 0 corr = 1
+    const bar = (k, v, cls, off) => { const y0 = Y(0), y1 = Y(v); s += `<rect class="${cls}" x="${X(k) + off}" y="${Math.min(y0, y1)}" width="${bw}" height="${Math.max(0.5, Math.abs(y1 - y0))}"/>`; };
+    bar(0, 1, 'acfb', -bw);
+    for (let k = 1; k <= n; k++) { bar(k, r[k - 1], 'acfb', -bw); bar(k, p[k - 1], 'pacfb', 0); }
+    // Bartlett bands for ACF (as RATS @bjident draws)
+    let up = '', dn = '';
+    for (let k = 1; k <= n; k++) {
+      let s2 = 1; for (let j = 1; j < k; j++) s2 += 2 * r[j - 1] ** 2;
+      const b = 2 * Math.sqrt(s2 / T), xa = X(k) - bw - 2, xb = X(k) + bw + 2;
+      up += `${k === 1 ? 'M' : 'L'}${xa},${Y(b)} L${xb},${Y(b)} `; dn += `${k === 1 ? 'M' : 'L'}${xa},${Y(-b)} L${xb},${Y(-b)} `;
+    }
+    s += `<path class="band" d="${up}"/><path class="band" d="${dn}"/>`;
+    s += `<g class="legend"><rect class="legbox" x="${W - mr - 118}" y="${H - mb - 46}" width="112" height="40"/><rect class="acfb" x="${W - mr - 110}" y="${H - mb - 39}" width="12" height="10"/><text x="${W - mr - 92}" y="${H - mb - 30}">CORRS</text><rect class="pacfb" x="${W - mr - 110}" y="${H - mb - 23}" width="12" height="10"/><text x="${W - mr - 92}" y="${H - mb - 14}">PARTIALS</text></g>`;
+    return s + '</svg>';
+  }
+
+  // line chart (time series). series: [{y:[], cls}], y0 start year
+  function lineChart(series, y0, title, opts = {}) {
+    const W = 640, H = opts.h || 260, ml = 58, mr = 14, mt = title ? 30 : 12, mb = 28;
+    const T = series[0].y.length, iw = W - ml - mr, ih = H - mt - mb;
+    let lo = Infinity, hi = -Infinity; series.forEach(se => se.y.forEach(v => { lo = Math.min(lo, v); hi = Math.max(hi, v); }));
+    if (opts.zero) { lo = Math.min(lo, 0); hi = Math.max(hi, 0); }
+    const pad_ = (hi - lo) * 0.06 || 1; lo -= pad_; hi += pad_;
+    const X = t => ml + t / (T - 1) * iw, Y = v => mt + (hi - v) / (hi - lo) * ih;
+    let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(title || 'time series graph')}">`;
+    if (title) s += `<text class="ttl" x="${W / 2}" y="19" text-anchor="middle">${esc(title)}</text>`;
+    s += `<rect class="frame" x="${ml}" y="${mt}" width="${iw}" height="${ih}"/>`;
+    niceTicks(lo, hi, 5).forEach(v => { s += `<line class="grid" x1="${ml}" x2="${ml + iw}" y1="${Y(v)}" y2="${Y(v)}"/><text class="tick" x="${ml - 6}" y="${Y(v) + 4}" text-anchor="end">${tickLabel(v)}</text>`; });
+    if (opts.zero) s += `<line class="zero" x1="${ml}" x2="${ml + iw}" y1="${Y(0)}" y2="${Y(0)}"/>`;
+    const years = Math.ceil(T / 12), stepY = years > 24 ? 5 : years > 10 ? 3 : years > 4 ? 2 : 1;
+    for (let yr = 0; yr * 12 < T; yr += stepY) s += `<text class="tick" x="${X(yr * 12)}" y="${H - 9}" text-anchor="middle">${y0 + yr}</text>`;
+    series.forEach(se => { s += `<path class="${se.cls || 'l1'}" d="${se.y.map((v, t) => (t ? 'L' : 'M') + X(t).toFixed(1) + ',' + Y(v).toFixed(1)).join('')}"/>`; });
+    if (opts.legend) s += `<g class="legend">${opts.legend.map((lg, i) => `<line class="${lg.cls}" x1="${ml + 10 + i * 120}" x2="${ml + 34 + i * 120}" y1="${mt + 12}" y2="${mt + 12}"/><text x="${ml + 40 + i * 120}" y="${mt + 16}">${esc(lg.name)}</text>`).join('')}</g>`;
+    return s + '</svg>';
+  }
+  // Actual/Fitted and Residuals (RATS @regactfit style: two panels)
+  function actFit(y, fit, e, y0, title) {
+    return `<div class="figpair"><div class="figlbl">${esc(title || 'Actual/Fitted and Residuals')}</div>` +
+      lineChart([{ y, cls: 'l1' }, { y: fit, cls: 'l2' }], y0, 'Actual (solid) and Fitted (dashed)', { h: 230 }) +
+      lineChart([{ y: e, cls: 'l3' }], y0, 'Residuals (actual − fitted)', { h: 200, zero: true }) + '</div>';
+  }
+
+  return { rng, newSeed, lgamma, ibeta, tTwoSided, fSurv, chiSurv, normTwoSided, inv, ols, mean, acf, pacf, ljungBox, boxPierce, moments, jb, arma, MON, MONTHS, ym, rDate, pad, sig, fx, pstr, comma, round, linregText, esc, bjident, lineChart, actFit, niceTicks };
+})();
+
+
+/* ===== QUESTION GENERATORS (each mirrors an Exam 1 question type) ===== */
+const G = (() => {
+  const { rng, ols, acf, pacf, ljungBox, moments, jb, arma, MON, MONTHS, rDate, pad, fx, comma, round, linregText, bjident, lineChart, actFit, chiSurv, normTwoSided, tTwoSided } = E;
+  const sub = s => `<sub>${s}</sub>`;
+  const yT = k => 'y' + sub(k ? 't−' + k : 't');
+  const eT = k => 'ε' + sub(k ? 't−' + k : 't');
+  const Lp = k => (k === 1 ? 'L' : 'L<sup>' + k + '</sup>');
+  const num0 = v => +(+v).toFixed(10);
+  const fmtN = (v, d = 2) => comma(v, d);
+
+  // MC helper: correct first, then distractors; shuffles (optionally keep order)
+  function mc(rg, o) {
+    const opts = [o.correct].concat(o.wrong.filter((w, i, a) => w !== o.correct && a.indexOf(w) === i));
+    let order = opts.map((_, i) => i);
+    if (!o.fixed) order = rg.shuffle(order);
+    return { kind: 'mc', label: o.label, q: o.q, skill: o.skill, options: order.map(i => opts[i]), answer: order.indexOf(0), explain: o.explain, pts: o.pts || 1 };
+  }
+  // fixed-order MC where answer index given
+  const mcFixed = (o) => ({ kind: 'mc', label: o.label, q: o.q, skill: o.skill, options: o.options, answer: o.answer, explain: o.explain, pts: o.pts || 1 });
+  const numQ = o => ({ kind: 'num', label: o.label, q: o.q, skill: o.skill, answer: o.answer, tol: o.tol || { rel: 0.002, abs: 0.01 }, unit: o.unit || '', explain: o.explain, pts: o.pts || 1 });
+  const textQ = o => ({ kind: 'text', label: o.label, q: o.q, skill: o.skill, model: o.model, points: o.points, pts: o.pts || 2 });
+  const pre = text => ({ kind: 'pre', text });
+  const html = h => ({ kind: 'html', html: h });
+  const monthName = (y0, idx) => { const d = E.ym(y0, idx); return MONTHS[d.m] + ' ' + d.y; };
+
+  // ============ Q1: best trend model + forecast ============
+  function trend(rg, opts = {}) {
+    const name = rg.pick(['DD', 'SALES', 'HSTARTS', 'VISITS', 'ORDERS', 'RIDERS', 'CLAIMS']);
+    const y0 = rg.pick([1985, 1987, 1990, 1992, 1995]), years = rg.pick([25, 28, 30]), T = years * 12;
+    const scen = opts.scen || rg.pick(['quad', 'quad', 'linear', 'both']);
+    let res;
+    for (let tries = 0; tries < 80 && !res; tries++) {
+      const t = Array.from({ length: T }, (_, i) => i + 1), one = t.map(() => 1), t2 = t.map(v => v * v);
+      const level = Math.round(rg.range(4000, 20000)), sd = level * rg.range(0.012, 0.04);
+      const noise = arma(rg, T, [rg.range(0, 0.4)], [], sd);
+      let f;
+      if (scen === 'quad') { const c = rg.sign() * level * rg.range(0.03, 0.12) / (T * T); f = x => level + c * x * x; }
+      else if (scen === 'linear') { const b = rg.sign() * level * rg.range(0.04, 0.2) / T; f = x => level + b * x; }
+      else { const c = rg.sign() * level * rg.range(0.06, 0.15) / (T * T), b = -2 * c * T * rg.range(0.35, 0.7); f = x => level + b * x + c * x * x; }
+      const y = t.map((x, i) => f(x) + noise[i]);
+      const m = {
+        lin: ols(y, [one, t], ['Constant', 'TIME'], { dep: name }),
+        deg2: ols(y, [one, t, t2], ['Constant', 'TIME', 'TIMESQ'], { dep: name }),
+        quad: ols(y, [one, t2], ['Constant', 'TIMESQ'], { dep: name })
+      };
+      const keys = ['lin', 'deg2', 'quad'];
+      const bySbc = keys.slice().sort((a, b) => m[a].sbc - m[b].sbc)[0], byAic = keys.slice().sort((a, b) => m[a].aic - m[b].aic)[0], byR = keys.slice().sort((a, b) => m[b].rbar2 - m[a].rbar2)[0];
+      if (!(bySbc === byAic && byAic === byR)) continue;
+      // printed values must separate clearly
+      const sorted = keys.map(k => +m[k].sbc.toFixed(3)); if (new Set(sorted).size < 3) continue;
+      if (scen === 'quad' && !(bySbc === 'quad' && m.deg2.p[1] > 0.1 && m.quad.r2 > 0.4)) continue;
+      if (scen === 'linear' && !(bySbc === 'lin' && m.deg2.p[2] > 0.1 && m.lin.r2 > 0.4)) continue;
+      if (scen === 'both' && !(bySbc === 'deg2' && m.deg2.p[1] < 0.001 && m.deg2.p[2] < 0.001 && m.deg2.r2 > 0.4)) continue;
+      res = { m, win: bySbc };
+    }
+    if (!res) return trend(rg, { scen: 'quad' });
+    const { m, win } = res;
+    const label = { lin: 'Linear trend (Constant, TIME)', deg2: '2nd-degree trend (Constant, TIME, TIMESQ)', quad: 'Quadratic trend (Constant, TIMESQ)' };
+    const shortL = { lin: 'linear', deg2: '2nd-degree', quad: 'quadratic' };
+    const txt = ['SET TIME = T', 'set timesq = time^2', ''].concat(['lin', 'deg2', 'quad'].map(k => linregText(m[k], { y0, full: false, crits: true }) + '\n')).join('\n');
+    // printed coefficients (what the student sees)
+    const P = k => m[win].b.map(v => +E.sig(v, 10));
+    const bw = P(win);
+    const fc = idx => { const x = idx + 1; return win === 'lin' ? bw[0] + bw[1] * x : win === 'quad' ? bw[0] + bw[1] * x * x : bw[0] + bw[1] * x + bw[2] * x * x; };
+    const eqn = win === 'lin' ? `${name} = ${E.sig(bw[0], 10)} ${bw[1] < 0 ? '−' : '+'} ${E.sig(Math.abs(bw[1]), 10)} × TIME`
+      : win === 'quad' ? `${name} = ${E.sig(bw[0], 10)} ${bw[1] < 0 ? '−' : '+'} ${E.sig(Math.abs(bw[1]), 10)} × TIME²`
+        : `${name} = ${E.sig(bw[0], 10)} ${bw[1] < 0 ? '−' : '+'} ${E.sig(Math.abs(bw[1]), 10)} × TIME ${bw[2] < 0 ? '−' : '+'} ${E.sig(Math.abs(bw[2]), 10)} × TIME²`;
+    const f1 = T + rg.int(1, 6) - 1, f2 = T + rg.int(7, 12) - 1; // 0-based idx
+    const tbl = ['lin', 'deg2', 'quad'].map(k => `<tr><td>${shortL[k]}</td><td>${fx(m[k].rbar2, 4)}</td><td>${fx(m[k].aic, 3)}</td><td>${fx(m[k].sbc, 3)}</td></tr>`).join('');
+    const why = win === 'quad' ? `In the 2nd-degree model TIME is not significant (Signif ${fx(m.deg2.p[1], 3)} &gt; 0.05): it adds a penalty without improving the fit.`
+      : win === 'lin' ? `In the 2nd-degree model TIMESQ is not significant (Signif ${fx(m.deg2.p[2], 3)} &gt; 0.05): the curve isn't needed, so the extra ingredient only adds a penalty.`
+        : `Both TIME and TIMESQ are significant in the 2nd-degree model (Signif ${fx(m.deg2.p[1], 3)} and ${fx(m.deg2.p[2], 3)}), so the extra ingredient earns its penalty.`;
+    const parts = [
+      mc(rg, { label: 'a', skill: 'fit', q: 'From the printouts, which of the three models is the best fit?', correct: label[win], wrong: Object.values(label), fixed: true,
+        explain: `Line up the three judges: <table class="mini"><tr><th>Model</th><th>R-Bar² (higher)</th><th>AIC (lower)</th><th>SBC (lower)</th></tr>${tbl}</table>The ${shortL[win]} model wins all three. ${why}` })
+    ];
+    // fix MC order to natural order (lin, deg2, quad)
+    parts[0].options = Object.values(label); parts[0].answer = ['lin', 'deg2', 'quad'].indexOf(win);
+    const maxR2 = ['lin', 'deg2', 'quad'].sort((a, b) => m[b].r2 - m[a].r2)[0];
+    if (opts.mode === 'mock') parts.push(textQ({ label: 'b', skill: 'fit', q: 'Explain why you chose your answer to part (a).', model: `The ${shortL[win]} model has the lowest AIC (${fx(m[win].aic, 3)}) and SBC (${fx(m[win].sbc, 3)}) and the highest R-Bar² (${fx(m[win].rbar2, 4)}). ${why.replace(/&gt;/g, '>')}`,
+      points: ['Names AIC and SBC (SIC) and says LOWER is better, quoting the winning values', 'Names R-Bar² and says HIGHER is better', win === 'both' ? 'Notes both TIME and TIMESQ are significant' : 'Points to the insignificant variable in the 2nd-degree model (Signif > 0.05)', 'Does NOT pick a model just because plain R² is highest'] }));
+    else parts.push(mc(rg, { label: 'b', skill: 'fit', q: 'Which explanation for part (a) would earn full credit?', correct: `Lowest AIC and SBC and highest R-Bar². ${why}`,
+      wrong: [`It has the highest Centered R² (${fx(m[maxR2].r2, 7)}), and the highest R² always wins.`, 'It has the highest AIC and SBC, which means the most information was captured.', 'It has the most significant coefficients, so it must fit best.'],
+      explain: 'R-Bar², AIC and SBC are the judges, because each charges a penalty per ingredient. Plain R² always rises when you add a variable, so it can\'t be used to compare models with different numbers of ingredients. AIC/SBC: lower wins.' }));
+    parts.push(numQ({ label: 'c', skill: 'fcst', q: `What value of TIME do you plug in for ${monthName(y0, f1)}? (Jan ${y0} = 1)`, answer: f1 + 1, tol: { abs: 0 },
+      explain: `TIME is the running month count. The data end at ${monthName(y0, T - 1)} = ${T} (${years} years × 12). Keep counting: ${monthName(y0, T)} = ${T + 1}, so ${monthName(y0, f1)} = ${f1 + 1}. Never plug in the month number or the year.` }));
+    parts.push(numQ({ label: 'd', skill: 'fcst', q: `Use the model you chose to forecast ${name} for ${monthName(y0, f1)}.`, answer: fc(f1), tol: { rel: 0.0015 },
+      explain: `Equation from the Coeff column: <code>${eqn}</code>. With TIME = ${f1 + 1}${win !== 'lin' ? ` (TIME² = ${comma((f1 + 1) ** 2, 0)})` : ''}: forecast ≈ <b>${fmtN(fc(f1))}</b>.` }));
+    if (opts.mode === 'mock') parts.push(numQ({ label: 'e', skill: 'fcst', q: `And forecast ${name} for ${monthName(y0, f2)}.`, answer: fc(f2), tol: { rel: 0.0015 },
+      explain: `TIME = ${f2 + 1}. Forecast ≈ <b>${fmtN(fc(f2))}</b> from <code>${eqn}</code>.` }));
+    return {
+      gen: 'trend', title: 'Pick the best trend model, then forecast', examRef: 'Old exam Q1',
+      stem: `Refer to the RATS output. ${name} is a series of monthly observations from January ${y0} to December ${y0 + years - 1}, resulting in ${T} observations. You believe there might be a time trend in ${name}, so you run three models: a linear trend, a 2nd-degree model (both linear and quadratic), and a quadratic trend.`,
+      exhibits: [pre(txt)], parts
+    };
+  }
+
+  // ============ Q2: seasonality ============
+  const DUMORDER = ['DEC', 'NOV', 'OCT', 'SEP', 'AUG', 'JUL', 'JUN', 'MAY', 'APR', 'MAR', 'JAN', 'FEB'];
+  function seasonSim(rg, strength, withTime, nameOpt) {
+    const name = nameOpt || rg.pick(['GG', 'AA', 'TICKETS', 'HOTEL', 'ICECRM', 'ROOMS', 'BOOKINGS']);
+    const y0 = rg.pick([1987, 1990, 1995, 2000]), years = rg.pick([20, 25, 30]), T = years * 12;
+    const runs = rg.chance(0.5);
+    for (let tries = 0; tries < 120; tries++) {
+      const base = Math.round(rg.range(5000, 30000)), sd = base * rg.range(0.03, 0.08);
+      const phi = runs ? rg.range(0.75, 0.93) : rg.range(-0.05, 0.12);
+      const noise = arma(rg, T, [phi], [], sd * Math.sqrt(1 - phi * phi));
+      const amp = { none: rg.range(0.0, 0.08), weak: rg.range(0.2, 0.32), moderate: rg.range(0.45, 0.8), strong: rg.range(1.5, 3) }[strength] * sd;
+      const phase = rg.range(0, 2 * Math.PI), eff = Array.from({ length: 12 }, (_, m) => amp * (Math.sin(2 * Math.PI * m / 12 + phase) + 0.35 * rg.n()));
+      const trendB = withTime ? rg.sign() * base * rg.range(0.0003, 0.0012) : 0;
+      const y = Array.from({ length: T }, (_, t) => base + eff[t % 12] + trendB * (t + 1) + noise[t]);
+      const cols = DUMORDER.map(mn => { const mi = MON.indexOf(mn); return y.map((_, t) => (t % 12 === mi ? 1 : 0)); });
+      const names = DUMORDER.slice();
+      if (withTime) { cols.push(y.map((_, t) => t + 1)); names.push('TIME'); }
+      const o = ols(y, cols, names, { dep: name });
+      // seasonal F: are month averages equal? For dummies only it equals RATS's regression F
+      const ok = strength === 'none' ? (o.Fp > 0.06 && o.r2 < 0.1) : strength === 'weak' ? (o.Fp < 0.03 && o.r2 >= 0.1 && o.r2 < 0.25) : strength === 'moderate' ? (o.Fp < 0.001 && o.r2 >= 0.25 && o.r2 < 0.5) : (o.Fp < 0.001 && o.r2 >= 0.5);
+      if (withTime && strength === 'none') continue;
+      const dwOk = runs ? o.dw < 1.2 : (o.dw > 1.75 && o.dw < 2.3);
+      if (ok && dwOk) return { name, y0, years, T, o, y, runs };
+    }
+    return null;
+  }
+  const r2band = r2 => (r2 < 0.10 ? 0 : r2 < 0.25 ? 1 : r2 < 0.50 ? 2 : r2 < 0.75 ? 3 : 4);
+  const BANDS = ['Below 0.10: no real evidence of seasonality', '0.10–0.25: maybe 1–2 months differ', '0.25–0.50: some evidence, take a closer look', '0.50–0.75: probably should model it', '0.75 and up: have to model it'];
+  function seasonParts(rg, S, label0, opts = {}) {
+    const { name, y0, T, o } = S, has = !(o.Fp > 0.05);
+    const coefOf = mn => { const k = o.names.indexOf(mn); return +E.sig(o.b[k], 11); };
+    const vals = MON.map(coefOf);
+    const lo = Math.min(...vals), hi = Math.max(...vals);
+    const loM = MONTHS[vals.indexOf(lo)], hiM = MONTHS[vals.indexOf(hi)];
+    const parts = [];
+    const yesTxt = `Yes. The month averages are far apart (${fmtN(lo, 0)} in ${loM} to ${fmtN(hi, 0)} in ${hiM}), R² = ${fx(o.r2, 3)}, and the F-test Signif = ${fx(o.Fp, 3)} &lt; 0.05, so the months differ.`;
+    const noTxt = `No. The month averages are close (${fmtN(lo, 0)} to ${fmtN(hi, 0)}), R² is only ${fx(o.r2, 3)}, and the F-test Signif = ${fx(o.Fp, 3)} &gt; 0.05, so we can't say the months differ.`;
+    if (opts.mode === 'mock') {
+      parts.push(mcFixed({ label: label0, skill: 'seas', q: `Look at the output for ${name}. Do you see significant evidence of seasonality?`, options: ['Yes', 'No'], answer: has ? 0 : 1, explain: has ? yesTxt : noTxt }));
+      parts.push(textQ({ label: label0 + ' (explain)', skill: 'seas', q: `Explain how you came to your conclusion for ${name}.`, model: (has ? yesTxt : noTxt).replace(/&lt;/g, '<').replace(/&gt;/g, '>') + (S.runs ? ` The residuals move in long waves and DW = ${fx(o.dw, 2)} (well below 2), so there is serial correlation the month dummies don't capture.` : ` The residuals look random and DW = ${fx(o.dw, 2)} (about 2).`),
+        points: ['Compares the month coefficients to each other (spread), not to zero', `Uses Centered R² (${fx(o.r2, 3)}) with Kamp's rule of thumb`, `Uses the F-test Signif (${fx(o.Fp, 3)}) vs 0.05`, 'Mentions the graph: repeating yearly pattern or not', 'Does NOT use "every month is significant" as evidence'] }));
+    } else {
+      parts.push(mc(rg, { label: label0, skill: 'seas', q: `Look at the regression output (numbers and graph) for ${name}. Do you see significant evidence of seasonality, and why?`, correct: has ? yesTxt : noTxt,
+        wrong: [has ? noTxt : yesTxt,
+          'Yes. Every month\'s Signif is 0.000, so every month is significant: that proves seasonality.',
+          `No. The Durbin-Watson statistic is ${fx(o.dw, 2)}, so there is no seasonality.`],
+        explain: `Seasonality means the months are <b>different from each other</b>. Check (1) the spread of the month coefficients, (2) Centered R² with Kamp's rules, (3) Significance Level of F (below 0.05 = months differ). The individual month Signif values only test "is this month's average zero?", which is always yes, so they're useless here.` }));
+      parts.push(mcFixed({ label: label0 + '2', skill: 'seas', q: `Centered R² is ${fx(o.r2, 4)}. Which of Kamp's rules of thumb (9/24) applies?`, options: BANDS, answer: r2band(o.r2), explain: `R² = ${fx(o.r2, 3)} falls in "${BANDS[r2band(o.r2)]}". With month dummies, R² = the share of the up-and-down explained by the months alone.` }));
+    }
+    if (opts.forecast !== false && (has || opts.forceFc)) {
+      const fIdx = T + rg.int(0, 11), mm = E.ym(y0, fIdx).m, mn = MON[mm];
+      const tc = o.names.includes('TIME') ? +E.sig(o.b[o.names.indexOf('TIME')], 10) : 0;
+      const ans = coefOf(mn) + tc * (fIdx + 1);
+      parts.push(numQ({ label: opts.fcLabel || 'c', skill: 'seas', q: `Use the seasonal regression on ${name} to forecast ${name} for ${monthName(y0, fIdx)}.`, answer: ans, tol: { rel: 0.0008 },
+        explain: tc ? `Model = month dummies + TIME. Forecast = ${mn} coefficient + TIME coefficient × TIME = ${fmtN(coefOf(mn))} ${tc < 0 ? '−' : '+'} ${E.sig(Math.abs(tc), 10)} × ${fIdx + 1} = <b>${fmtN(ans)}</b>. (TIME: ${monthName(y0, T - 1)} = ${T}, so ${monthName(y0, fIdx)} = ${fIdx + 1}.)`
+          : `With month dummies only, the forecast for a month is just that month's coefficient (its average). Find <b>${mn}</b> by name (RATS lists DEC, NOV … JAN, FEB): <b>${fmtN(ans)}</b>.` }));
+    }
+    if (opts.mode !== 'mock' && rg.chance(0.6)) parts.push(mcFixed({ label: 'd', skill: 'dw', q: `Durbin-Watson = ${fx(o.dw, 4)}. Is there a concern about serial correlation in ${name}'s residuals?`, options: ['Yes: well below 2, so the misses come in runs (positive serial correlation)', 'No: close to 2, so the misses look random', 'Yes: above 2 means positive serial correlation'], answer: S.runs ? 0 : 1,
+      explain: `DW about 2 = fine. Near 0 = positive serial correlation (misses come in runs; the residual graph stays above or below zero for long stretches). Here DW = ${fx(o.dw, 2)}.` }));
+    return parts;
+  }
+  function season(rg, opts = {}) {
+    const strength = opts.strength || rg.pick(['none', 'weak', 'moderate', 'strong', 'strong']);
+    const withTime = opts.withTime !== undefined ? opts.withTime : (strength !== 'none' && rg.chance(0.3));
+    const S = seasonSim(rg, strength, withTime) || seasonSim(rg, 'strong', false);
+    const { name, y0, years, T, o, y } = S;
+    const txt = linregText(o, { y0, full: false });
+    const parts = seasonParts(rg, S, 'a', { mode: opts.mode, forceFc: true });
+    if (opts.mode !== 'mock' && rg.chance(0.35)) parts.push(mcFixed({ label: 'e', skill: 'seas', q: 'Every month\'s Signif in this output is 0.0000. What does that tell you?', options: ['Only that each month\'s average is not zero: nothing about seasonality', 'That every month is different from the others, so there is seasonality', 'That the model has no serial correlation', 'That the F-test must be significant too'], answer: 0,
+      explain: 'Each month\'s t-test asks "is this month\'s average zero?" For sales or employment the answer is always no. Seasonality is about months differing <i>from each other</i>, which is what the F-test and R² measure.' }));
+    return {
+      gen: 'season', title: 'Is there seasonality? Forecast a month', examRef: 'Old exam Q2',
+      stem: `${name} is a monthly series from January ${y0} to December ${y0 + years - 1} (${T} observations). The RATS printout shows a seasonal regression on 12 month dummies (no constant)${withTime ? ' plus a TIME trend' : ''}, and the graph of the actual, fitted and residuals.`,
+      exhibits: [pre(txt), html(actFit(y, o.fit, o.e, y0, `Actual/Fitted and Residuals: ${name}`))], parts
+    };
+  }
+
+  // ============ Q4: demand / elasticities ============
+  function demand(rg, opts = {}) {
+    const T = rg.pick([120, 144, 156, 180]), y0 = rg.pick([2004, 2006, 2008]);
+    const elasOwn = rg.sign() > 0 ? -rg.range(1.25, 2.3) : -rg.range(0.25, 0.8);
+    const eI = rg.sign() * rg.range(0.12, 0.7), eJ = rg.sign() * rg.range(0.12, 0.7);
+    const eInc = rg.pick([-rg.range(0.2, 0.7), rg.range(0.15, 0.8), rg.range(1.25, 1.9)]);
+    const Q = rg.range(40000, 600000), Pm = rg.range(1, 6), PIm = rg.range(1, 8), PJm = rg.range(1, 8), Im = rg.range(20000, 70000);
+    const insig = rg.chance(0.5) ? rg.pick(['PRICEI', 'PRICEJ', 'INCOME']) : null;
+    const df = T - 5;
+    const mk = (b, signif) => { const t = signif ? rg.sign() * 0 + Math.sign(b) * rg.range(2.6, 16) : Math.sign(b) * rg.range(0.15, 1.55); const se = Math.abs(b / t); return { b, se, t: b / se, p: tTwoSided(b / se, df) }; };
+    const lin = {
+      Constant: mk(Q * rg.range(0.6, 1.4), true), PRICEI: mk(eI * Q / PIm, insig !== 'PRICEI'), PRICE: mk(elasOwn * Q / Pm, true), PRICEJ: mk(eJ * Q / PJm, insig !== 'PRICEJ'), INCOME: mk(eInc * Q / Im, insig !== 'INCOME')
+    };
+    const lg = { Constant: mk(rg.range(2, 9), true), LPRICE: mk(elasOwn, true), LPRICEI: mk(eI, true), LPRICEJ: mk(eJ, true), LINCOME: mk(eInc, true) };
+    const runs = rg.chance(0.65), dw1 = runs ? rg.range(0.35, 1.1) : rg.range(1.8, 2.2), dw2 = runs ? dw1 * rg.range(0.85, 1.1) : rg.range(1.8, 2.2);
+    const r2a = rg.range(0.5, 0.9), r2b = Math.min(0.97, r2a + rg.range(-0.03, 0.04));
+    const block = (dep, names, tab, r2, dw, mdep) => {
+      const L = ['LINREG ' + dep, '# ' + names.join(' '), 'Monthly Data From ' + y0 + ':01 To ' + (y0 + T / 12 - 1) + ':12', pad('Usable Observations', 32, false) + pad(T, 16), pad('Centered R^2', 32, false) + pad(fx(r2, 7), 16), pad('R-Bar^2', 32, false) + pad(fx(1 - (1 - r2) * (T - 1) / (T - 5), 7), 16), pad('Mean of Dependent Variable', 32, false) + pad(E.sig(mdep, 11), 16), pad('Durbin-Watson Statistic', 32, false) + pad(fx(dw, 4), 16), '', '    Variable' + pad('Coeff', 22) + pad('Std Error', 16) + pad('T-Stat', 12) + pad('Signif', 13), '*'.repeat(75)];
+      names.forEach((nm, k) => { const c = tab[nm]; L.push(pad((k + 1) + '.', 4, false) + pad(nm, 10, false) + pad(E.sig(c.b, 10), 20) + pad(E.sig(c.se, 9), 16) + pad(fx(c.t, 5), 12) + pad(E.pstr(c.p), 13)); });
+      return L.join('\n');
+    };
+    const txt = block('QUANTITY', ['Constant', 'PRICEI', 'PRICE', 'PRICEJ', 'INCOME'], lin, r2a, dw1, Q) + '\n\nSTATS PRICE\n' + pad('Sample Mean', 24, false) + pad(fx(Pm, 6), 12) + '\n\n' + block('LQ', ['Constant', 'LPRICE', 'LPRICEI', 'LPRICEJ', 'LINCOME'], lg, r2b, dw2, Math.log(Q));
+    const sigL = nm => lin[nm].p < 0.05;
+    const relate = (nm, good) => !sigL(nm) ? 2 : lin[nm].b > 0 ? 0 : 1;
+    const parts = [];
+    parts.push(mcFixed({ label: 'a1', skill: 'elas', q: 'Linear model: is any coefficient NOT significantly different from zero at the 5% level?', options: ['None: every coefficient is significant', 'PRICEI', 'PRICE', 'PRICEJ', 'INCOME'], answer: insig ? ['PRICEI', 'PRICE', 'PRICEJ', 'INCOME'].indexOf(insig) + 1 : 0,
+      explain: `Scan the Signif column: below 0.05 = significant. ${insig ? `${insig} has Signif ${fx(lin[insig].p, 4)} &gt; 0.05, so it is not significantly different from zero.` : `Every Signif is below 0.05 (largest: ${Object.entries(lin).sort((a, b) => b[1].p - a[1].p)[0][0]}, ${fx(Object.values(lin).sort((a, b) => b.p - a.p)[0].p, 4)}).`}` }));
+    const relOpts = ['Substitute', 'Complement', 'Can\'t tell: the coefficient is not significant'];
+    ['I', 'J'].forEach((g, gi) => { const nm = 'PRICE' + g; parts.push(mcFixed({ label: gi ? 'a3' : 'a2', skill: 'elas', q: `Is related good ${g.toLowerCase()} a complement or a substitute?`, options: relOpts, answer: relate(nm), explain: sigL(nm) ? `${nm} = ${E.sig(lin[nm].b, 6)}, ${lin[nm].b > 0 ? 'positive: when good ' + g.toLowerCase() + ' gets pricier, people buy MORE of our good instead → substitute (Coke/Pepsi)' : 'negative: when good ' + g.toLowerCase() + ' gets pricier, people buy LESS of our good too → complement (hot dogs/buns)'}.` : `${nm} has Signif ${fx(lin[nm].p, 3)} &gt; 0.05, so its sign can't be trusted: no significant relationship.` })); });
+    parts.push(mcFixed({ label: 'a4', skill: 'elas', q: 'Is the good normal or inferior?', options: ['Normal', 'Inferior', 'Can\'t tell: income is not significant'], answer: !sigL('INCOME') ? 2 : lin.INCOME.b > 0 ? 0 : 1,
+      explain: sigL('INCOME') ? `INCOME = ${E.sig(lin.INCOME.b, 5)}: ${lin.INCOME.b > 0 ? 'positive → people buy more as income rises → normal good' : 'negative → people buy less as income rises → inferior good'}.` : `INCOME has Signif ${fx(lin.INCOME.p, 3)} &gt; 0.05: no significant income effect.` }));
+    parts.push(numQ({ label: 'b1', skill: 'elas', q: 'Log-log model: what is the (own-price) elasticity of demand?', answer: +E.sig(lg.LPRICE.b, 10), tol: { abs: 0.002 }, explain: `In a log-log model every coefficient is an elasticity. Own price = the LPRICE row: <b>${E.sig(lg.LPRICE.b, 6)}</b>. A 1% price rise changes quantity by about ${fx(lg.LPRICE.b, 2)}%.` }));
+    parts.push(mcFixed({ label: 'b2', skill: 'elas', q: 'Is demand elastic or inelastic?', options: ['Elastic (|elasticity| > 1)', 'Inelastic (|elasticity| < 1)'], answer: Math.abs(lg.LPRICE.b) > 1 ? 0 : 1, explain: `Ignore the minus sign: |${fx(lg.LPRICE.b, 3)}| = ${fx(Math.abs(lg.LPRICE.b), 3)} is ${Math.abs(lg.LPRICE.b) > 1 ? 'above 1 → elastic (buyers are very price-sensitive)' : 'below 1 → inelastic (buyers barely react, like gas or medicine)'}.` }));
+    const cg = rg.pick(['J', 'I']);
+    parts.push(numQ({ label: 'b3', skill: 'elas', q: `What is the cross-price elasticity with good ${cg.toLowerCase()}?`, answer: +E.sig(lg['LPRICE' + cg].b, 10), tol: { abs: 0.002 }, explain: `Row LPRICE${cg}: <b>${E.sig(lg['LPRICE' + cg].b, 6)}</b>. ${lg['LPRICE' + cg].b > 0 ? 'Positive → substitute' : 'Negative → complement'}. For a cross-price elasticity only the sign matters (no necessity/luxury labels).` }));
+    parts.push(mcFixed({ label: 'b4', skill: 'elas', q: 'From the log-log estimate, is this good inferior, a necessity, or a luxury?', options: ['Inferior (income elasticity < 0)', 'Necessity (between 0 and 1)', 'Luxury (above 1)'], answer: lg.LINCOME.b < 0 ? 0 : lg.LINCOME.b < 1 ? 1 : 2, explain: `Income elasticity = LINCOME = ${E.sig(lg.LINCOME.b, 6)}. Below 0 inferior, 0 to 1 necessity, above 1 luxury.` }));
+    parts.push(mcFixed({ label: 'c', skill: 'dw', q: 'Is there anything in the printout that raises concerns about serial correlation?', options: [`Yes: Durbin-Watson = ${fx(dw1, 2)} and ${fx(dw2, 2)}, well below 2 → positive serial correlation`, `No: Durbin-Watson = ${fx(dw1, 2)} and ${fx(dw2, 2)}, close to 2 → misses look random`, 'Yes: the R² values are too low', 'No: every coefficient is significant, so the errors must be fine'], answer: runs ? 0 : 1,
+      explain: 'The Durbin-Watson statistic is the serial-correlation check: about 2 is fine, near 0 = positive serial correlation (errors correlated over time, breaking Gauss-Markov rule 4, so the Signif values look better than they are).' }));
+    if (opts.mode !== 'mock' && rg.chance(0.35)) parts.push(numQ({ label: 'stretch', skill: 'elas', q: 'Stretch (9/3 idea): using the LINEAR model, estimate the own-price elasticity at the means: coefficient × (mean price ÷ mean quantity).', answer: +E.sig(lin.PRICE.b, 10) * +fx(Pm, 6) / +E.sig(Q, 11), tol: { rel: 0.01 },
+      explain: `Elasticity = slope × P̄/Q̄ = ${E.sig(lin.PRICE.b, 7)} × ${fx(Pm, 4)} ÷ ${fmtN(Q)} ≈ <b>${fx(lin.PRICE.b * Pm / Q, 3)}</b>. A linear model's elasticity changes along the line, so you evaluate it at the averages; the log-log model gives one constant elasticity.` }));
+    return {
+      gen: 'demand', title: 'Demand regression: signs, significance, elasticities', examRef: 'Old exam Q4',
+      stem: `A regression using time-series data estimates a demand function (monthly ${y0}–${y0 + T / 12 - 1}, ${T} months). The dependent variable is quantity (LQ when logs were taken); independent variables are the good's own price (PRICE / LPRICE), prices of two related goods i and j (PRICEI, PRICEJ / LPRICEI, LPRICEJ), and income (INCOME / LINCOME). All money variables are in real terms.`,
+      exhibits: [pre(txt)], parts
+    };
+  }
+
+  // ============ Q5: lag operator ============
+  function lagop(rg, opts = {}) {
+    const coef = () => rg.pick([0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 0.05, 0.15, 0.25, 0.03, 0.02, 0.35, 0.45]);
+    const pickLags = maxL => { const all = [1, 2, 3].slice(0, maxL); let s = all.filter(() => rg.chance(0.6)); if (!s.length) s = [rg.pick(all)]; return s; };
+    let ar = [], ma = [];
+    while (!ar.length && !ma.length || (ar.length + ma.length < 2)) { ar = rg.chance(0.9) ? pickLags(rg.pick([1, 2, 2, 3])).map(l => ({ l, c: rg.sign() * coef() })) : []; ma = rg.chance(0.9) ? pickLags(3).map(l => ({ l, c: rg.sign() * coef() })) : []; }
+    const p = ar.length ? Math.max(...ar.map(a => a.l)) : 0, q = ma.length ? Math.max(...ma.map(a => a.l)) : 0;
+    const term = (c, body, first) => { const s = c < 0 ? (first ? '−' : ' − ') : (first ? '' : ' + '); return s + (Math.abs(c) === 1 ? '' : num0(Math.abs(c))) + body; };
+    // lag form: (1 + Σ a L^l) y = (1 + Σ b L^l) e   where a = AR coefficient as it appears on the LEFT
+    const poly = (X, v) => (X.length ? `(1${X.map(a => term(a.c, Lp(a.l))).join('')}) ${v}` : v);
+    const lagForm = (A, B) => `${poly(A, yT(0))} = ${poly(B, eT(0))}`;
+    const normForm = (A, B) => `${yT(0)}${A.map(a => term(a.c, yT(a.l))).join('')} = ${eT(0)}${B.map(b => term(b.c, eT(b.l))).join('')}`;
+    const solvedForm = (A, B) => `${yT(0)} = ${A.map((a, i) => term(-a.c, yT(a.l), i === 0)).join('')}${A.length ? ' + ' : ''}${eT(0)}${B.map(b => term(b.c, eT(b.l))).join('')}`;
+    const flip = X => X.map(x => ({ l: x.l, c: -x.c }));
+    const shift = X => { if (!X.length) return X; const k = X.length - 1, used = X.map(x => x.l); let nl = [1, 2, 3, 4].find(l => !used.includes(l) && l !== X[k].l); return X.map((x, i) => (i === k ? { l: nl, c: x.c } : x)).sort((a, b) => a.l - b.l); };
+    const dir = opts.dir || rg.pick(['pack', 'unpack']);
+    const solved = dir === 'pack' && ar.length && rg.chance(0.4);
+    const parts = [];
+    if (dir === 'pack') {
+      const shown = solved ? solvedForm(ar, ma) : normForm(ar, ma);
+      const wrong = [ar.length ? lagForm(flip(ar), ma) : null, ma.length ? lagForm(ar, shift(ma)) : null, ma.length ? lagForm(ar, flip(ma)) : null, ar.length ? lagForm(shift(ar), ma) : null, lagForm(ma, ar)].filter(w => w && w !== lagForm(ar, ma));
+      parts.push(mc(rg, { label: 'a', skill: 'lag', q: `Write in lag-operator notation: <span class="eq">${shown}</span>`, correct: lagForm(ar, ma), wrong: rg.shuffle(wrong).slice(0, 3),
+        explain: `${solved ? 'First move every past y to the left side (signs flip when they cross the = sign): <span class="eq">' + normForm(ar, ma) + '</span>. ' : ''}Then rewrite each past term as an L-power times the present term (y${sub('t−k')} = L<sup>k</sup>y${sub('t')}) and pull the present term out: <span class="eq">${lagForm(ar, ma)}</span>.` }));
+    } else {
+      const wrong = [ar.length ? normForm(flip(ar), ma) : null, ma.length ? normForm(ar, shift(ma)) : null, ma.length ? normForm(ar, flip(ma)) : null, ar.length ? normForm(shift(ar), ma) : null, normForm(ma, ar)].filter(w => w && w !== normForm(ar, ma));
+      parts.push(mc(rg, { label: 'a', skill: 'lag', q: `Write in normal form: <span class="eq">${lagForm(ar, ma)}</span>`, correct: normForm(ar, ma), wrong: rg.shuffle(wrong).slice(0, 3),
+        explain: `Multiply each piece by y${sub('t')} (or ε${sub('t')}) and turn L<sup>k</sup> into "k periods back": <span class="eq">${normForm(ar, ma)}</span>. Keep exactly the powers you see: a missing power means a missing lag. (Equivalent: <span class="eq">${solvedForm(ar, ma)}</span>.)` }));
+    }
+    parts.push(numQ({ label: 'b', skill: 'lag', q: 'This is an ARMA(p, q). What is p (the AR order)?', answer: p, tol: { abs: 0 }, explain: `p = the highest L-power on the y side = ${p}${p ? '' : ' (no past y terms)'}.` }));
+    parts.push(numQ({ label: 'c', skill: 'lag', q: 'What is q (the MA order)?', answer: q, tol: { abs: 0 }, explain: `q = the highest L-power on the ε side = ${q}${q ? '' : ' (no past shocks)'}. So this is ARMA(${p},${q}).` }));
+    return { gen: 'lagop', title: 'Lag operator: pack and unpack', examRef: 'Old exam Q5', stem: 'L is the "go back one period" button: L·y<sub>t</sub> = y<sub>t−1</sub>, L<sup>2</sup>·y<sub>t</sub> = y<sub>t−2</sub>. Same for the shocks ε.', exhibits: [], parts };
+  }
+
+  // ============ ACF / PACF identification + Ljung-Box (Kamp's handwritten note) ============
+  function simIdent(rg, type, T) {
+    const nl = 25;
+    for (let tries = 0; tries < 200; tries++) {
+      let y, p = 0, q = 0, desc = '';
+      if (type === 'wn') { y = arma(rg, T); desc = 'white noise'; }
+      else if (type === 'ar1') { const f = rg.sign() * rg.range(0.45, 0.9); if (f < 0 && rg.chance(0.5)) continue; y = arma(rg, T, [f]); p = 1; desc = `AR(1), φ = ${fx(f, 2)}`; }
+      else if (type === 'ar2') { const f1 = rg.range(0.3, 0.7), f2 = rg.range(0.25, 0.42); if (f1 + f2 > 0.95) continue; y = arma(rg, T, [f1, f2]); p = 2; desc = `AR(2), φ₁ = ${fx(f1, 2)}, φ₂ = ${fx(f2, 2)}`; }
+      else if (type === 'ma1') { const th = rg.sign() * rg.range(0.45, 0.9); y = arma(rg, T, [], [th]); q = 1; desc = `MA(1), θ = ${fx(th, 2)}`; }
+      else if (type === 'ma2') { const t1 = rg.range(0.4, 0.8), t2 = rg.range(0.4, 0.65); y = arma(rg, T, [], [t1, t2]); q = 2; desc = `MA(2), θ₁ = ${fx(t1, 2)}, θ₂ = ${fx(t2, 2)}`; }
+      else if (type === 'trend') { const n = arma(rg, T, [0.7]); const b = rg.range(0.03, 0.08); y = n.map((v, t) => b * t + v); desc = 'a trending (non-stationary) series'; }
+      else { const amp = rg.range(2.5, 4), ph = rg.range(0, 6); const n = arma(rg, T, [0.3]); y = n.map((v, t) => amp * Math.sin(2 * Math.PI * t / 12 + ph) + v); desc = 'a seasonal (non-stationary) series'; }
+      const r = acf(y, nl), pp = pacf(r), pb = 2 / Math.sqrt(T);
+      const bart = k => { let s = 1; for (let j = 1; j < k; j++) s += 2 * r[j - 1] ** 2; return 2 * Math.sqrt(s / T); };
+      const outA = k => Math.abs(r[k - 1]) > bart(k) * 1.15, inA = k => Math.abs(r[k - 1]) < bart(k) * 0.85;
+      const outP = k => Math.abs(pp[k - 1]) > pb * 1.2, inP = k => Math.abs(pp[k - 1]) < pb * 0.85;
+      let ok = true;
+      if (type === 'wn') { for (let k = 1; k <= 25; k++) if (!(Math.abs(r[k - 1]) < bart(k) * 0.9 && Math.abs(pp[k - 1]) < pb * 0.9)) ok = false; }
+      else if (p) { for (let k = 1; k <= p; k++) if (!outP(k)) ok = false; for (let k = p + 1; k <= p + 6; k++) if (!inP(k)) ok = false; if (!outA(1)) ok = false; }
+      else if (q) { for (let k = 1; k <= q; k++) if (!outA(k)) ok = false; for (let k = q + 1; k <= q + 6; k++) if (!inA(k)) ok = false; if (!outP(1)) ok = false; if (q === 1 && !inA(2)) ok = false; }
+      else if (type === 'trend') ok = r[0] > 0.9 && r[24] > 0.5;
+      else ok = r[11] > 0.45 && r[23] > 0.4;
+      if (ok) return { y, r, pp, p, q, desc, type };
+    }
+    return null;
+  }
+  const ID_OPTS = ['White noise', 'AR(p): ACF dies off gradually, PACF cuts off', 'MA(q): ACF cuts off, PACF dies off', 'Non-stationary: trend (ACF near 1, dies off very slowly)', 'Non-stationary: seasonal (ACF spikes at lags 12, 24)'];
+  const idIndex = t => ({ wn: 0, ar1: 1, ar2: 1, ma1: 2, ma2: 2, trend: 3, seasonal: 4 }[t]);
+  function corrText(name, y0, T, r, m) {
+    const L = ['CORRELATE(NUMBER=' + m + ',QSTATS,METHOD=YULE) ' + name, '', 'Correlations of Series ' + name, 'Monthly Data From ' + rDate(y0, 0) + ' To ' + rDate(y0, T - 1), '', 'Autocorrelations'];
+    for (let s = 0; s < m; s += 6) { L.push(Array.from({ length: Math.min(6, m - s) }, (_, i) => pad(s + i + 1, 10)).join('')); L.push(Array.from({ length: Math.min(6, m - s) }, (_, i) => pad(fx(r[s + i], 5), 10)).join('')); }
+    const Q = ljungBox(r, T, m), pv = chiSurv(Q, m);
+    L.push('', 'Ljung-Box Q-Statistics', '     Lags  Statistic Signif Lvl', pad(m, 9) + pad(fx(Q, 3), 11) + pad(fx(pv, 6), 11));
+    return { text: L.join('\n'), Q, pv };
+  }
+  function ident(rg, opts = {}) {
+    const type = opts.type || rg.pick(['wn', 'ar1', 'ar1', 'ar2', 'ma1', 'ma1', 'ma2', 'trend', 'seasonal']);
+    const T = rg.pick([312, 300, 360, 240]), y0 = rg.pick([2000, 1995, 1990]);
+    const S = simIdent(rg, type, T) || simIdent(rg, 'ar1', T);
+    const name = rg.pick(['SERIES1', 'X', 'ZZ', 'SHOCKS', 'RESIDS', 'CYC']);
+    const stationary = !['trend', 'seasonal'].includes(S.type);
+    const parts = [];
+    parts.push(mcFixed({ label: 'a', skill: 'acf', q: 'Is the series covariance stationary?', options: ['Yes', 'No'], answer: stationary ? 0 : 1,
+      explain: stationary ? 'The bars fall back toward zero quickly (or were never big), so the series keeps returning to a stable average: stationary.' : (S.type === 'trend' ? 'The ACF starts near 1 and dies off very slowly: the series drifts, so it is <b>not</b> stationary (a trend). Fix: detrend or first-difference.' : 'The ACF spikes again at lags 12 and 24: a repeating yearly pattern, so <b>not</b> stationary (seasonal). Fix: month dummies or a seasonal difference.') }));
+    parts.push(mcFixed({ label: 'b', skill: 'acf', q: 'Is it white noise?', options: ['Yes: every bar is inside the bands', 'No: some bars stick out of the bands'], answer: S.type === 'wn' ? 0 : 1,
+      explain: S.type === 'wn' ? 'Every ACF and PACF bar after lag 0 stays inside the bands (about ±2/√T). Nothing left to predict: white noise.' : 'At least one bar sticks out past the bands, so the series is connected to its own past: not white noise.' }));
+    parts.push(mcFixed({ label: 'c', skill: 'acf', q: 'Which best describes the graph?', options: ID_OPTS, answer: idIndex(S.type),
+      explain: { wn: 'All bars inside the bands → white noise.', ar1: 'ACF dies off gradually (φ, φ², φ³…); PACF has ONE bar then drops inside the bands → AR(1).', ar2: 'ACF dies off gradually; PACF has TWO bars then cuts off → AR(2).', ma1: 'ACF has ONE bar then cuts off; the PACF dies off (often flipping sign) → MA(1).', ma2: 'ACF has TWO bars then cuts off; the PACF dies off → MA(2).', trend: 'ACF starts near 1 and dies off very slowly → trend, non-stationary.', seasonal: 'ACF bounces with peaks at 12 and 24 → seasonal, non-stationary.' }[S.type] + ' Memory hook: <b>MA cuts off in the ACF; AR cuts off in the PACF.</b>' }));
+    if (S.p || S.q) parts.push(numQ({ label: 'd', skill: 'acf', q: S.p ? 'What is p (count the significant PACF bars before the cutoff)?' : 'What is q (count the significant ACF bars before the cutoff)?', answer: S.p || S.q, tol: { abs: 0 }, explain: `True model: ${S.desc}. ${S.p ? 'Count the PACF bars outside the bands before it drops to zero' : 'Count the ACF bars outside the bands before it drops to zero'}: ${S.p || S.q}.` }));
+    const withLB = opts.lb !== undefined ? opts.lb : rg.chance(0.6);
+    const exhibits = [html(bjident(S.r, S.pp, T, '0 Differences of ' + name))];
+    if (withLB) {
+      const m = Math.round(Math.sqrt(T)), C = corrText(name, y0, T, S.r, m);
+      exhibits.push(pre(C.text));
+      parts.push(mcFixed({ label: 'e', skill: 'wn', q: `Ljung-Box Q(${m}) = ${fx(C.Q, 3)} with Signif ${fx(C.pv, 6)}. What do you conclude?`, options: ['Reject H₀: the series is NOT white noise', 'Fail to reject H₀: no evidence against white noise'], answer: C.pv < 0.05 ? 0 : 1,
+        explain: `Ljung-Box H₀ = "the series is white noise" (all autocorrelations zero). Signif ${fx(C.pv, 4)} is ${C.pv < 0.05 ? 'below 0.05 → reject: there is pattern left to model' : 'above 0.05 → fail to reject: consistent with white noise'}. m = √T ≈ √${T} ≈ ${m} lags.` }));
+    }
+    return { gen: 'ident', title: 'Read the ACF/PACF graph', examRef: 'Kamp\'s handwritten must-know', stem: `RATS @bjident output for ${name} (${T} monthly observations). Dark bars = autocorrelations (CORRS), light bars = partial autocorrelations (PARTIALS). The lines above and below zero are the significance bands.`, exhibits, parts, truth: S.desc };
+  }
+
+  // ============ Tests: Jarque-Bera, Ljung-Box, H0 ============
+  function tests(rg, opts = {}) {
+    const v = opts.variant || rg.pick(['jb', 'jb', 'lb']);
+    if (v === 'jb') {
+      const kind = rg.pick(['normal', 'normal', 'skew', 'fat']);
+      const T = rg.pick([150, 200, 240, 319, 360]), y0 = 2000, name = rg.pick(['DOLLAR', 'RETURNS', 'LIRA', 'GROWTH', 'YEN']);
+      let M;
+      for (let i = 0; i < 100; i++) {
+        let y;
+        if (kind === 'normal') y = Array.from({ length: T }, () => rg.n());
+        else if (kind === 'skew') y = Array.from({ length: T }, () => Math.exp(rg.n() * rg.range(0.5, 0.9)));
+        else y = Array.from({ length: T }, () => rg.n() / Math.sqrt((rg.n() ** 2 + rg.n() ** 2 + rg.n() ** 2) / 3));
+        const sc = rg.range(0.5, 20), sh = rg.range(0, 50);
+        M = moments(y.map(v => v * sc + sh));
+        const J = jb(T, +fx(M.skew, 6), +fx(M.exkurt, 6)), p = chiSurv(J, 2);
+        if ((kind === 'normal' && p > 0.1) || (kind !== 'normal' && p < 0.01)) break;
+      }
+      const S = +fx(M.skew, 6), K = +fx(M.exkurt, 6), J = jb(T, S, K), pJ = chiSurv(J, 2);
+      const r = (a, b) => pad(a, 24, false) + pad(b, 14);
+      const txt = ['STATISTICS ' + name, '', 'Statistics on Series ' + name, 'Monthly Data From ' + rDate(y0, 0) + ' To ' + rDate(y0, T - 1), 'Observations' + pad(T, 26),
+        r('Sample Mean', fx(M.mean, 6)) + '      Variance' + pad(fx(M.variance, 6), 18),
+        r('Standard Error', fx(M.sd, 6)) + '      SE of Sample Mean' + pad(fx(M.sd / Math.sqrt(T), 6), 9),
+        r('Skewness', fx(S, 6)) + '      Signif Level (Sk=0)' + pad(fx(normTwoSided(S / Math.sqrt(6 / T)), 6), 7),
+        r('Kurtosis (excess)', fx(K, 6)) + '      Signif Level (Ku=0)' + pad(fx(normTwoSided(K / Math.sqrt(24 / T)), 6), 7),
+        r('Jarque-Bera', fx(J, 6)) + '      Signif Level (JB=0)' + pad(fx(pJ, 6), 7)].join('\n');
+      const parts = [
+        mcFixed({ label: 'a', skill: 'norm', q: 'What is the null hypothesis (the default) of the Jarque-Bera test?', options: ['The data are normally distributed', 'The data are white noise', 'The data have no trend', 'The mean is zero'], answer: 0, explain: 'JB checks normality using skewness (normal = 0) and kurtosis (normal = 3; RATS prints EXCESS kurtosis, so normal = 0). H₀: normal.' }),
+        mcFixed({ label: 'b', skill: 'norm', q: `Are the data normally distributed? (JB = ${fx(J, 3)}, Signif ${fx(pJ, 4)})`, options: ['Reject normality: Signif < 0.05', 'Fail to reject normality: Signif > 0.05, consistent with normal'], answer: pJ < 0.05 ? 0 : 1,
+          explain: `Signif ${fx(pJ, 4)} ${pJ < 0.05 ? '< 0.05 → reject H₀: not normal (like LIRA, JB 452.8)' : '> 0.05 → fail to reject: no evidence against normality (like DOLLAR, JB 0.88, p 0.65)'}. Cutoff in χ²₂ terms: JB above 5.99 = reject.` }),
+        numQ({ label: 'c', skill: 'norm', q: `Compute JB yourself: JB = T/6 × (S² + K²/4), with T = ${T}, S = ${fx(S, 4)}, K (excess) = ${fx(K, 4)}.`, answer: jb(T, +fx(S, 4), +fx(K, 4)), tol: { rel: 0.01, abs: 0.02 },
+          explain: `S² = ${fx(S * S, 4)}; K²/4 = ${fx(K * K / 4, 4)}; sum = ${fx(S * S + K * K / 4, 4)}; × ${T}/6 = ${fx(T / 6, 3)} → JB ≈ <b>${fx(jb(T, +fx(S, 4), +fx(K, 4)), 3)}</b>. Compare with 5.99 (χ² with 2 df at 5%).` })
+      ];
+      if (rg.chance(0.5)) parts.push(mcFixed({ label: 'd', skill: 'norm', q: `Kurtosis (excess) is printed as ${fx(K, 3)}. What is the regular kurtosis, and what does it say?`, options: [`${fx(K + 3, 3)}: ${K > 0.3 ? 'fatter tails than normal (more extreme values)' : K < -0.3 ? 'thinner tails than normal' : 'about the normal value of 3'}`, `${fx(K, 3)}: the normal value is 0, so ${K > 0 ? 'fat tails' : 'thin tails'}`, `${fx(K - 3, 3)}: subtract 3 to get regular kurtosis`], answer: 0, explain: 'RATS prints EXCESS kurtosis = kurtosis − 3. Add 3 back to compare with the normal value of 3. Above 3 = fat tails (more extreme values than a bell curve).' }));
+      return { gen: 'tests', title: 'Normality test (Jarque-Bera)', examRef: 'Kamp\'s handwritten must-know', stem: `Summary statistics for ${name} (${T} observations).`, exhibits: [pre(txt)], parts };
+    }
+    // Ljung-Box
+    const type = rg.pick(['wn', 'wn', 'ma1', 'ar1']); const T = rg.pick([312, 300, 240, 360]);
+    const S = simIdent(rg, type, T) || simIdent(rg, 'wn', T); const name = rg.pick(['WN', 'RESIDS', 'SHOCK', 'E']);
+    const m = Math.round(Math.sqrt(T)), C = corrText(name, 2000, T, S.r, m);
+    const parts = [
+      mcFixed({ label: 'a', skill: 'wn', q: 'What is the null hypothesis of the Ljung-Box Q test?', options: ['The series is white noise (all autocorrelations up to m are zero)', 'The series is normally distributed', 'The series has a unit root', 'The first autocorrelation is 1'], answer: 0, explain: 'Ljung-Box squares and adds the first m autocorrelations (with a small-sample adjustment). H₀: white noise. Box-Pierce is the same idea for big samples.' }),
+      mcFixed({ label: 'b', skill: 'wn', q: `Q(${m}) = ${fx(C.Q, 3)}, Signif ${fx(C.pv, 6)}. Is the series white noise?`, options: ['Not white noise: reject H₀ (Signif < 0.05)', 'Consistent with white noise: fail to reject (Signif > 0.05)'], answer: C.pv < 0.05 ? 0 : 1,
+        explain: `${C.pv < 0.05 ? 'Signif below 0.05 → reject: the autocorrelations together are too big to be chance (like MA1A: Q = 88, p = 0.000)' : 'Signif above 0.05 → fail to reject: looks like white noise (like WN: Q(18) = 25.1, p = 0.12)'}.` }),
+      numQ({ label: 'c', skill: 'wn', q: `How many lags m should the test use with T = ${T}? (Kamp's rule: m = √T, rounded)`, answer: m, tol: { abs: 0 }, explain: `m = √${T} ≈ ${fx(Math.sqrt(T), 2)} → ${m}. Too big an m and the χ² approximation is poor; too small and the test has low power.` })
+    ];
+    if (rg.chance(0.5)) parts.push(numQ({ label: 'd', skill: 'wn', q: `Stretch: the Box-Pierce version is Q = T × Σρ̂(τ)². If the first ${Math.min(3, m)} autocorrelations were the only non-zero ones (${S.r.slice(0, 3).map(v => fx(v, 3)).join(', ')}), what is Q_BP?`, answer: T * S.r.slice(0, 3).reduce((s, v) => s + (+fx(v, 3)) ** 2, 0), tol: { rel: 0.02, abs: 0.05 },
+      explain: `Square each: ${S.r.slice(0, 3).map(v => fx((+fx(v, 3)) ** 2, 5)).join(' + ')} = ${fx(S.r.slice(0, 3).reduce((s, v) => s + (+fx(v, 3)) ** 2, 0), 5)}; × T (${T}) = <b>${fx(T * S.r.slice(0, 3).reduce((s, v) => s + (+fx(v, 3)) ** 2, 0), 3)}</b>.` }));
+    return { gen: 'tests', title: 'White-noise test (Ljung-Box)', examRef: 'Kamp\'s handwritten must-know', stem: `RATS CORRELATE output for ${name} (${T} observations).`, exhibits: [pre(C.text)], parts };
+  }
+
+  // ============ MA/AR properties ============
+  function armamath(rg) {
+    const pool = [
+      () => { const th = rg.pick([0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, -0.4, -0.6]); return numQ({ skill: 'arma', q: `MA(1): y<sub>t</sub> = ε<sub>t</sub> ${th < 0 ? '−' : '+'} ${Math.abs(th)}ε<sub>t−1</sub>. What is the first autocorrelation ρ(1)?`, answer: th / (1 + th * th), tol: { abs: 0.003 }, explain: `ρ(1) = θ/(1+θ²) = ${th}/(1 + ${fx(th * th, 2)}) = <b>${fx(th / (1 + th * th), 4)}</b>. For an MA(1), ρ(1) can never exceed 0.5 in size, and ρ(2), ρ(3)… are all 0.` }); },
+      () => { const th = rg.pick([0.3, 0.5, 0.8, 0.6]), s2 = rg.pick([1, 2, 4, 9]); return numQ({ skill: 'arma', q: `MA(1) with θ = ${th} and σ² = ${s2}. What is the unconditional variance of y<sub>t</sub>?`, answer: (1 + th * th) * s2, tol: { abs: 0.005 }, explain: `Var(y) = Var(ε<sub>t</sub>) + θ²Var(ε<sub>t−1</sub>) = (1 + θ²)σ² = (1 + ${fx(th * th, 2)}) × ${s2} = <b>${fx((1 + th * th) * s2, 3)}</b>.` }); },
+      () => { const th = rg.pick([0.4, 0.8]); return numQ({ skill: 'arma', q: `MA(1) with θ = ${th}. What is ρ(2), the autocorrelation at lag 2?`, answer: 0, tol: { abs: 0.0001 }, explain: 'Zero. y<sub>t</sub> and y<sub>t−2</sub> share no shocks (y<sub>t</sub> uses ε<sub>t</sub>, ε<sub>t−1</sub>; y<sub>t−2</sub> uses ε<sub>t−2</sub>, ε<sub>t−3</sub>). That\'s why an MA(q) ACF cuts off after q.' }); },
+      () => { const f = rg.pick([0.4, 0.5, 0.6, 0.8, 0.9, -0.5]), k = rg.pick([2, 3, 4]); return numQ({ skill: 'arma', q: `AR(1): y<sub>t</sub> = ${f}y<sub>t−1</sub> + ε<sub>t</sub>. What is ρ(${k})?`, answer: f ** k, tol: { abs: 0.002 }, explain: `For an AR(1), ρ(τ) = φ<sup>τ</sup> = ${f}<sup>${k}</sup> = <b>${fx(f ** k, 4)}</b>. It shrinks toward zero gradually (and flips sign each lag if φ < 0).` }); },
+      () => { const f = rg.pick([0.5, 0.6, 0.8, 0.9]), s2 = rg.pick([1, 2, 4]); return numQ({ skill: 'arma', q: `AR(1) with φ = ${f} and σ² = ${s2}. What is the unconditional variance of y<sub>t</sub>?`, answer: s2 / (1 - f * f), tol: { rel: 0.003 }, explain: `Var(y) = σ²/(1 − φ²) = ${s2}/(1 − ${fx(f * f, 2)}) = <b>${fx(s2 / (1 - f * f), 3)}</b>. Bigger φ → bigger variance (shocks linger longer).` }); },
+      () => { const f = rg.pick([0.95, 1, 1.05, -0.9, 0.3, -1.2]); return mcFixed({ skill: 'arma', q: `Is the AR(1) y<sub>t</sub> = ${f}y<sub>t−1</sub> + ε<sub>t</sub> covariance stationary?`, options: ['Yes', 'No'], answer: Math.abs(f) < 1 ? 0 : 1, explain: `An AR(1) is stationary only if |φ| &lt; 1. Here |φ| = ${Math.abs(f)} → ${Math.abs(f) < 1 ? 'stationary' : 'not stationary (shocks never die out, or explode)'}.` }); },
+      () => { const f = rg.pick([0.5, 0.8, 0.6]), v = rg.pick([2, 4, 10, -3]); return numQ({ skill: 'arma', q: `AR(1) with φ = ${f}. Last month y<sub>t−1</sub> = ${v}. What is the conditional mean E[y<sub>t</sub> | y<sub>t−1</sub>]?`, answer: f * v, tol: { abs: 0.001 }, explain: `Conditional mean = φ·y<sub>t−1</sub> = ${f} × ${v} = <b>${fx(f * v, 2)}</b> (the shock's expected value is 0). The unconditional mean is 0; conditioning on the past is what makes AR models useful for forecasting.` }); },
+      () => { const r1 = rg.pick([0.6, 0.7, 0.8]); return mcFixed({ skill: 'arma', q: `A sample ACF shows ρ(1) = ${r1}, then nothing significant after lag 1. Could this be an MA(1)?`, options: ['No: an MA(1) can never have |ρ(1)| above 0.5', 'Yes: one bar then a cutoff is always MA(1)', 'Yes, with θ = ' + r1], answer: 0, explain: 'ρ(1) = θ/(1+θ²) is at most 0.5 (at θ = 1). A sample value well above 0.5 points elsewhere (e.g., check the PACF for an AR).' }); },
+      () => mcFixed({ skill: 'arma', q: 'Which statement about an MA(q) process is TRUE?', options: ['Every MA(q) is covariance stationary', 'An MA(q) is stationary only if |θ| < 1', 'An MA(q)\'s ACF dies off gradually', 'An MA(q)\'s PACF cuts off after q lags'], answer: 0, explain: 'All MA(q) processes are covariance stationary (10/15). |θ| < 1 is about invertibility, not stationarity. The MA ACF cuts off after q; the PACF dies off.' })
+    ];
+    const picks = rg.shuffle(pool).slice(0, 3).map((f, i) => Object.assign(f(), { label: 'abc'[i] }));
+    return { gen: 'armamath', title: 'MA and AR process properties', examRef: 'Lectures 10/13 and 10/15', stem: 'ε<sub>t</sub> is white noise with variance σ². The formulas: MA(1) ρ(1) = θ/(1+θ²), Var = (1+θ²)σ²; AR(1) ρ(τ) = φ<sup>τ</sup>, Var = σ²/(1−φ²).', exhibits: [], parts: picks };
+  }
+
+  // ============ Reading a RATS printout ============
+  function readout(rg) {
+    const T = rg.pick([120, 156, 200, 240, 319]), y0 = 2000, name = rg.pick(['SALES', 'LIRA', 'EMP', 'CONSUMP']);
+    const xs = ['X1', 'X2', 'X3'].map(() => Array.from({ length: T }, () => rg.n()));
+    const nm = rg.shuffle(['PRICE', 'ADS', 'TEMP', 'INCOME', 'RATE']).slice(0, 3);
+    const deadIdx = rg.int(0, 2), bs = [rg.range(2, 9), rg.range(2, 9), rg.range(2, 9)].map((b, i) => (i === deadIdx ? 0 : b * rg.sign()));
+    const sd = rg.range(5, 14), runs = rg.chance(0.5), noise = arma(rg, T, [runs ? 0.85 : 0], [], sd);
+    const y = Array.from({ length: T }, (_, t) => 100 + bs[0] * xs[0][t] + bs[1] * xs[1][t] + bs[2] * xs[2][t] + noise[t]);
+    const o = ols(y, [y.map(() => 1)].concat(xs), ['Constant'].concat(nm), { dep: name });
+    const dead = o.names.map((n, k) => (k && o.p[k] > 0.05 ? n : null)).filter(Boolean);
+    const t0 = rg.int(10, T - 10), act = y[t0], fit = o.fit[t0];
+    const parts = [
+      numQ({ label: 'a', skill: 'read', q: 'How many observations (T) and how many estimated coefficients (K)? Enter T.', answer: T, tol: { abs: 0 }, explain: `Usable Observations = ${T}. K = ${o.K} (Constant + ${o.K - 1} variables). Degrees of Freedom = T − K = ${T - o.K}.` }),
+      mcFixed({ label: 'b', skill: 'read', q: 'Which variable does NOT significantly affect ' + name + ' at the 5% level?', options: ['None: all are significant'].concat(nm), answer: dead.length === 1 ? nm.indexOf(dead[0]) + 1 : dead.length === 0 ? 0 : nm.indexOf(dead[0]) + 1, explain: `Signif (p-value) above 0.05 = no real effect. ${o.names.slice(1).map((n, k) => `${n}: ${fx(o.p[k + 1], 4)}`).join('; ')}.` }),
+      numQ({ label: 'c', skill: 'read', q: `Using the Std Error of Dependent Variable and the Standard Error of Estimate, approximate R² ≈ 1 − (SEE ÷ SE of dep. var)².`, answer: 1 - (o.see / o.sedep) ** 2, tol: { abs: 0.015 }, explain: `SEE = typical miss AFTER the model (${E.sig(o.see, 6)}); Std Error of Dep. Var = how much ${name} swings around its own average (${E.sig(o.sedep, 6)}). 1 − (${E.sig(o.see, 5)}/${E.sig(o.sedep, 5)})² ≈ <b>${fx(1 - (o.see / o.sedep) ** 2, 3)}</b>, close to Centered R² = ${fx(o.r2, 4)} (it differs slightly because of the T−K vs T−1 divisors).` }),
+      numQ({ label: 'd', skill: 'read', q: `In ${rDate(y0, t0)}, actual ${name} = ${fx(act, 2)} and the fitted value = ${fx(fit, 2)}. What is the residual?`, answer: +fx(act, 2) - +fx(fit, 2), tol: { abs: 0.011 }, explain: `Residual = actual − fitted = ${fx(act, 2)} − ${fx(fit, 2)} = <b>${fx(+fx(act, 2) - +fx(fit, 2), 2)}</b>. ${act < fit ? 'Negative → the line guessed too HIGH.' : 'Positive → the line guessed too LOW.'}` }),
+      mcFixed({ label: 'e', skill: 'dw', q: `Durbin-Watson = ${fx(o.dw, 4)}. What does it say?`, options: ['About 2: the misses look random (no serial correlation)', 'Well below 2: positive serial correlation (misses come in runs)', 'Well above 2: positive serial correlation'], answer: runs ? 1 : 0, explain: `DW ≈ 2 is fine; toward 0 = positive serial correlation; toward 4 = negative (rare). DW only checks one period back. Here ${fx(o.dw, 2)}.` })
+    ];
+    return { gen: 'readout', title: 'Read a RATS regression printout', examRef: 'Every printout question', stem: `A regression of ${name} on a constant and three variables.`, exhibits: [pre(linregText(o, { y0 }))], parts };
+  }
+
+  // ============ Transformations (9/3) ============
+  function transforms(rg) {
+    const pool = [
+      () => { const a = round(rg.range(80, 400), 1), g = rg.range(-0.08, 0.15), b = round(a * (1 + g), 1); return numQ({ skill: 'trans', q: `A series goes from ${a} to ${b}. What is the growth rate in percent?`, answer: (b - a) / a * 100, tol: { abs: 0.02 }, unit: '%', explain: `Growth = (new − old)/old × 100 = (${b} − ${a})/${a} × 100 = <b>${fx((b - a) / a * 100, 2)}%</b>.` }); },
+      () => { const a = round(rg.range(80, 400), 1), b = round(a * (1 + rg.range(0.01, 0.08)), 1); return numQ({ skill: 'trans', q: `Approximate the growth from ${a} to ${b} with logs: 100 × (ln ${b} − ln ${a}).`, answer: 100 * (Math.log(b) - Math.log(a)), tol: { abs: 0.02 }, unit: '%', explain: `100 × (${fx(Math.log(b), 4)} − ${fx(Math.log(a), 4)}) = <b>${fx(100 * (Math.log(b) - Math.log(a)), 2)}%</b>, close to the exact ${fx((b - a) / a * 100, 2)}%. Log differences ≈ growth rates for small changes.` }); },
+      () => { const nom = round(rg.range(20, 90), 2), cpi = round(rg.range(110, 320), 1); return numQ({ skill: 'trans', q: `Nominal price = $${nom}; CPI = ${cpi} (base = 100). What is the real price in base-year dollars?`, answer: nom / cpi * 100, tol: { abs: 0.01 }, explain: `Real = nominal ÷ CPI × 100 = ${nom}/${cpi} × 100 = <b>$${fx(nom / cpi * 100, 2)}</b>. "Real terms" = inflation removed.` }); },
+      () => { const b = round(rg.range(0.001, 0.012), 4); return mcFixed({ skill: 'trans', q: `A log-linear trend log(y) = α + βTIME (monthly) gives β = ${b}. What does β mean?`, options: [`y grows about ${fx(b * 100, 2)}% per month`, `y grows by ${b} units per month`, `y grows ${fx(b * 100, 2)}% per year`, `y grows ${b}% per month`], answer: 0, explain: `In a log-linear trend, β = average % change per period ÷ 100. So ${b} → about ${fx(b * 100, 2)}% per month (≈ ${fx(b * 1200, 1)}% per year).` }); },
+      () => { const v = round(rg.range(50, 500), 1), base = round(rg.range(50, 500), 1); return numQ({ skill: 'trans', q: `Make an index number with the base period = 100: the base-period value is ${base} and this period's value is ${v}.`, answer: v / base * 100, tol: { abs: 0.02 }, explain: `Index = value ÷ base value × 100 = ${v}/${base} × 100 = <b>${fx(v / base * 100, 2)}</b>. Above 100 = higher than the base period.` }); },
+      () => mcFixed({ skill: 'trans', q: 'Why take logs of a series like the lira exchange rate before modeling?', options: ['To turn exponential growth into a straight line and steady a variance that grows with the level', 'To make every coefficient significant', 'To remove seasonality', 'To make the series white noise'], answer: 0, explain: 'Logs flatten exponential growth (constant % growth becomes a straight line) and shrink big values more than small ones, steadying a variance that grows over time. Differences of logs ≈ growth rates.' })
+    ];
+    const picks = rg.shuffle(pool).slice(0, 3).map((f, i) => Object.assign(f(), { label: 'abc'[i] }));
+    return { gen: 'transforms', title: 'Growth rates, logs, real values', examRef: 'Lecture 9/3', stem: 'Quick calculator practice from the 9/3 lecture.', exhibits: [], parts: picks };
+  }
+
+  // ============ Forecasting extras (9/22, 9/29) ============
+  function forecasting(rg) {
+    const pool = [
+      () => { const f = round(rg.range(500, 20000), 2), s = round(f * rg.range(0.02, 0.08), 2); return [numQ({ skill: 'fcst', q: `A forecast is ${comma(f)} with a forecast standard error of ${comma(s)}. What is the LOWER end of the 95% forecast interval?`, answer: f - 1.96 * s, tol: { abs: 0.05 }, explain: `95% interval = forecast ± 1.96 × SE. Lower = ${comma(f)} − 1.96 × ${comma(s)} = <b>${comma(f - 1.96 * s)}</b>; upper = ${comma(f + 1.96 * s)}.` })]; },
+      () => { const a = round(rg.range(6, 9.5), 6), b = round(rg.range(0.001, 0.006), 6), T = rg.pick([240, 300, 360]), k = rg.int(1, 12); return [numQ({ skill: 'fcst', q: `A log-linear trend gives LY = ${a} + ${b} × TIME (TIME = 1 in the first month; ${T} months of data). Forecast Y (not log Y) for ${k} month(s) after the data end.`, answer: Math.exp(a + b * (T + k)), tol: { rel: 0.002 }, explain: `TIME = ${T} + ${k} = ${T + k}. Fitted log = ${a} + ${b} × ${T + k} = ${fx(a + b * (T + k), 5)}. Undo the log: e<sup>${fx(a + b * (T + k), 4)}</sup> = <b>${comma(Math.exp(a + b * (T + k)))}</b>.` })]; },
+      () => { const errs = Array.from({ length: 4 }, () => round(rg.range(-30, 30), 1)); return [numQ({ skill: 'fcst', q: `Out-of-sample forecast errors (actual − forecast) for 4 months: ${errs.join(', ')}. What is the MSE (mean squared error)?`, answer: errs.reduce((s, e) => s + e * e, 0) / 4, tol: { rel: 0.002 }, explain: `Square each error, then average: (${errs.map(e => fx(e * e, 2)).join(' + ')}) / 4 = <b>${fx(errs.reduce((s, e) => s + e * e, 0) / 4, 2)}</b>. MAE would average the absolute values: ${fx(errs.reduce((s, e) => s + Math.abs(e), 0) / 4, 2)}.` })]; },
+      () => { const m1 = round(rg.range(100, 400), 1), m2 = round(m1 * rg.range(0.7, 1.3), 1), a1 = round(rg.range(10, 15), 3), a2 = round(a1 + rg.range(0.02, 0.2) * rg.sign(), 3); return [mcFixed({ skill: 'fcst', q: `Within-sample forecasting: you hold out the last 12 months. Model A has the lower AIC (${Math.min(a1, a2)}) but a holdout MSE of ${a1 < a2 ? Math.max(m1, m2) : Math.min(m1, m2)}; Model B has AIC ${Math.max(a1, a2)} and holdout MSE ${a1 < a2 ? Math.min(m1, m2) : Math.max(m1, m2)}. Which forecasts better?`, options: ['The model with the lower holdout MSE', 'The model with the lower AIC: AIC always decides forecasting', 'Neither: you need R² to decide'], answer: 0, explain: 'The holdout test asks the real question: how well does the model predict data it never saw? Lower out-of-sample MSE wins the forecasting test even if the information criteria preferred the other model (Kamp 9/22: the criteria picked the 3rd-degree trend, but the forecast test picked the quadratic).' })]; },
+      () => { const c = round(rg.range(-3000, 1500), 1), last = round(rg.range(80000, 130000), 0), mn = rg.pick(MONTHS); return [numQ({ skill: 'seas', q: `A seasonally differenced series D = y<sub>t</sub> − y<sub>t−12</sub> is regressed on month dummies. The ${mn.toUpperCase().slice(0, 3)} coefficient is ${c}. Last year's ${mn} value was ${comma(last, 0)}. Forecast this year's ${mn}.`, answer: last + c, tol: { abs: 0.5 }, explain: `The dummy coefficient predicts the CHANGE versus the same month last year. Forecast = last year's ${mn} + coefficient = ${comma(last, 0)} ${c < 0 ? '−' : '+'} ${comma(Math.abs(c), 1)} = <b>${comma(last + c, 1)}</b>. Watch out: find ${mn.toUpperCase().slice(0, 3)} by name (Kamp's 9/29 board example accidentally used the JUL row for June).` })]; }
+    ];
+    const picks = rg.shuffle(pool).slice(0, 3).flatMap(f => f()).map((p, i) => Object.assign(p, { label: 'abc'[i] }));
+    return { gen: 'forecasting', title: 'Forecast intervals, log trends, holdouts', examRef: 'Lectures 9/22 and 9/29', stem: 'Forecasting calculations beyond plugging into a trend line.', exhibits: [], parts: picks };
+  }
+
+  // ============ Stationarity (10/1, 10/6) ============
+  function stationarity(rg) {
+    const type = rg.pick(['trend', 'seasonal', 'cycle', 'wn', 'trend', 'cycle']), T = 240, y0 = 2000;
+    let y;
+    if (type === 'trend') { const n = arma(rg, T, [0.6]); const b = rg.range(0.04, 0.1) * rg.sign(); y = n.map((v, t) => 50 + b * t + v); }
+    else if (type === 'seasonal') { const n = arma(rg, T, [0.2]); y = n.map((v, t) => 50 + 4 * Math.sin(2 * Math.PI * t / 12 + 1) + v); }
+    else if (type === 'cycle') y = arma(rg, T, [rg.range(0.8, 0.93)]).map(v => 50 + v);
+    else y = arma(rg, T).map(v => 50 + v);
+    const cls = ['Non-stationary: trend', 'Non-stationary: seasonal', 'Stationary, with a cycle (wanders but keeps coming back)', 'White noise'];
+    const ci = { trend: 0, seasonal: 1, cycle: 2, wn: 3 }[type];
+    const fixes = ['Detrend (regress on TIME, use residuals) or first-difference', 'Month dummies (use residuals) or seasonal difference y<sub>t</sub> − y<sub>t−12</sub>', 'Nothing to remove: model the cycle with AR(p)/MA(q)', 'Nothing: there is nothing left to predict'];
+    const facts = [
+      ['A covariance-stationary series can still have a cycle.', true, 'Stationary = stable average, stable wiggle, and correlations that depend only on the lag. Cycles are allowed (AR1A is stationary and cycles).'],
+      ['Every stationary series is white noise.', false, 'White noise is the special stationary case with NO cycle. AR and MA series are stationary but not white noise.'],
+      ['Every white noise series is covariance stationary.', true, 'Mean 0, constant variance, zero autocorrelation: it meets every condition.'],
+      ['A series with a trend is covariance stationary as long as the trend is straight.', false, 'Any trend moves the average over time, so the mean isn\'t stable: not stationary.'],
+      ['The ACF of a trending series starts near 1 and dies off very slowly.', true, 'Kamp\'s EMP example: autocorrelations near 1 for 25 lags, just because it drifts.'],
+      ['Durbin-Watson can detect serial correlation at lag 12.', false, 'DW only checks one period back; seasonal (lag 12) correlation can slip through.']
+    ];
+    const f = rg.pick(facts);
+    const parts = [
+      mcFixed({ label: 'a', skill: 'stat', q: 'Which best describes this series?', options: cls, answer: ci, explain: ['The level keeps drifting in one direction: the mean isn\'t stable → non-stationary (trend).', 'The same up-and-down repeats every 12 months → non-stationary (seasonal).', 'It wanders above and below a steady average for a while but always comes back: stationary with a cycle.', 'A random zigzag around a flat average, no runs, no repeats: white noise.'][ci] }),
+      mcFixed({ label: 'b', skill: 'stat', q: 'What should you do before modeling it with AR/MA tools?', options: fixes, answer: ci, explain: 'Remove what breaks stationarity (trend → detrend or difference; season → dummies or seasonal difference). A stationary cycle is exactly what AR/MA models are for. White noise is the end point.' }),
+      mcFixed({ label: 'c', skill: 'stat', q: `True or false: ${f[0]}`, options: ['True', 'False'], answer: f[1] ? 0 : 1, explain: f[2] })
+    ];
+    return { gen: 'stationarity', title: 'Stationary or not? How to fix it', examRef: 'Old exam Q7 + Lectures 10/1, 10/6', stem: 'Look at the graph of the series.', exhibits: [html(lineChart([{ y, cls: 'l1' }], y0, 'Series', { h: 240 }))], parts };
+  }
+
+  // ============ Written explanations (Q6/Q7 style) ============
+  const EXPLAIN = [
+    { id: 'q6', group: 'A', skill: 'fit', q: 'While it is usually the first measure of "fit" we learn, R² isn\'t used much. In class we used R̄² and two information criteria, the AIC and the SIC. All three are functions of the MSE of the regression. What differentiates them?',
+      model: 'All three start from the MSE (sum of squared residuals ÷ T) and penalize the number of estimated parameters K relative to the sample size T; plain R² always rises when you add a variable, so it can\'t compare models. They differ in how hard they penalize extra variables. R̄² penalizes only through degrees of freedom (T − K): the mildest penalty; higher is better. AIC = e^(2K/T)·MSE; SIC = T^(K/T)·MSE, the largest penalty (for T ≥ 8), so SIC favors the smallest model. For AIC and SIC, lower is better.',
+      points: ['All three are built from the MSE / sum of squared residuals', 'All penalize extra parameters K (relative to T); plain R² never goes down when you add a variable', 'R̄²: mildest penalty (degrees of freedom), HIGHER is better', 'AIC penalty e^(2K/T); SIC penalty T^(K/T)', 'SIC has the largest penalty → favors smaller models; AIC and SIC: LOWER is better'] },
+    { id: 'q7', group: 'B', skill: 'stat', q: 'Most of what we do requires covariance-stationary data, but many series (GDP and its components) are not. Give two methods we can use to still work with non-stationary series.',
+      model: '(1) Remove the non-stationary part with a regression and work with the residuals: regress on a time trend (TIME, TIME²) to detrend, and/or on month dummies to remove seasonality. (2) Difference the data: a first difference y_t − y_{t−1} removes a trend; a seasonal difference y_t − y_{t−12} removes monthly seasonality. Taking logs can also steady a variance that grows over time.',
+      points: ['Method 1: regress on trend (TIME) and/or seasonal dummies, then use the residuals', 'Method 2: difference: first difference for a trend', 'Seasonal difference (y_t − y_{t−12}) for seasonality', 'Bonus: logs to stabilize a growing variance'] },
+    { id: 'cs', group: 'B', skill: 'stat', q: 'What does it mean for a series to be covariance stationary? Why do we need it?',
+      model: 'Covariance stationary means the series behaves the same in every slice of time: (1) a constant mean, (2) a constant variance, and (3) the covariance between y_t and y_{t−τ} depends only on the lag τ, not on the date. Cycles are allowed. We need it because ACF/PACF and AR/MA models rely on stable relationships; with a trend, the series looks connected to its past just because it drifts.',
+      points: ['Constant (stable) mean', 'Constant variance', 'Autocovariance depends only on the lag, not on time', 'A cycle is still allowed', 'Why: AR/MA/ACF tools need stable relationships (trends create fake autocorrelation)'] },
+    { id: 'wn', group: 'B', skill: 'wn', q: 'What is white noise, and how would you test whether a series is white noise?',
+      model: 'White noise is a series with mean zero, constant variance, and no autocorrelation at any lag: nothing about the past helps predict it. Test it by looking at the ACF/PACF (every bar inside the ±2/√T bands) and with a Ljung-Box (or Box-Pierce) Q test on the first m ≈ √T autocorrelations: H₀ = white noise; Signif below 0.05 rejects it.',
+      points: ['Mean zero and constant variance', 'No autocorrelation at any lag / unpredictable from its past', 'ACF/PACF bars all inside the bands', 'Ljung-Box (or Box-Pierce) Q test with H₀ = white noise; p < 0.05 rejects', 'm ≈ √T lags'] },
+    { id: 'acfpacf', group: 'B', skill: 'acf', q: 'How do you use the ACF and PACF to tell an AR(p) from an MA(q), and to pick p or q?',
+      model: 'For an AR(p), the ACF dies off gradually (geometrically, φ^τ for an AR(1)) while the PACF has p significant bars and then cuts off to zero, so p = the number of significant PACF bars. For an MA(q), the ACF has q significant bars and then cuts off, while the PACF dies off gradually (often alternating in sign), so q = the number of significant ACF bars. Significant = outside the ±2/√T bands. First check the series is stationary (ACF not stuck near 1, no spikes at 12/24) and not white noise (bars inside the bands).',
+      points: ['AR(p): ACF dies off gradually; PACF cuts off after p', 'MA(q): ACF cuts off after q; PACF dies off', 'Count the bars outside the bands to get p or q', 'Check stationarity / white noise first'] },
+    { id: 'dw', group: 'A', skill: 'dw', q: 'What does the Durbin-Watson statistic measure, how do you read it, and what is one limitation?',
+      model: 'DW checks for first-order serial correlation in the residuals: whether this period\'s miss is related to last period\'s. DW ≈ 2 means no serial correlation; values toward 0 mean positive serial correlation (misses come in runs); toward 4 means negative. Serial correlation breaks the Gauss-Markov no-correlation assumption, so OLS is no longer BLUE and the Signif values look better than they are. Limitation: it only looks one period back, so it can miss seasonal (lag 12) correlation.',
+      points: ['Measures serial correlation of the residuals (lag 1)', 'About 2 = none; near 0 = positive; near 4 = negative', 'Consequence: violates Gauss-Markov / not BLUE / misleading significance', 'Limitation: only checks one lag back'] },
+    { id: 'season', group: 'A', skill: 'seas', q: 'How do you decide from a seasonal-dummy regression whether a series is seasonal? Why is there no constant in the regression?',
+      model: 'Each of the 12 dummy coefficients is that month\'s average. Seasonality means the months differ from each other, so look at (1) the spread of the coefficients, (2) the centered R² with the rules of thumb (below 0.10 none … above 0.75 must model it), and (3) the F-test Significance Level (below 0.05 = months differ). The individual month t-tests only test whether a month\'s average is zero, so they say nothing about seasonality. There is no constant because the 12 dummies always add up to 1; with a constant too, the columns are perfectly collinear (the dummy-variable trap) and RATS can\'t estimate it.',
+      points: ['Each coefficient = that month\'s average', 'Seasonality = months differ from each other (spread of coefficients)', 'Use R² rules of thumb and the F-test (p < 0.05)', 'Individual month significance is NOT evidence of seasonality', 'No constant: 12 dummies sum to 1 → perfect collinearity (dummy trap)'] },
+    { id: 'gm', group: 'A', skill: 'read', q: 'What are the Gauss-Markov assumptions in plain words, what does BLUE mean, and which assumption matters most in this course?',
+      model: 'Under the Gauss-Markov assumptions (linear model; errors average zero; constant error variance; errors not correlated with each other; X not correlated with the errors), OLS is BLUE: the Best (smallest variance) Linear Unbiased Estimator. The key one in time series is no serial correlation (assumption 4): with time data, misses often come in runs, so OLS stops being best and its standard errors and Signif values are misleading.',
+      points: ['Lists the main assumptions (linear, mean-zero errors, constant variance, no correlation between errors, X uncorrelated with errors)', 'BLUE = Best Linear Unbiased Estimator', 'The no-serial-correlation assumption is the key one for time series', 'Consequence: misleading standard errors / Signif values'] },
+    { id: 'wold', group: 'B', skill: 'wn', q: 'State Wold\'s theorem in plain words. Why does it justify ARMA models?',
+      model: 'Wold\'s theorem: any covariance-stationary series (with the predictable deterministic part removed) can be written as an infinite moving average of white-noise shocks: y_t = Σ b_i ε_{t−i} with b_0 = 1 and Σb_i² finite. Because we can\'t estimate infinitely many coefficients, we approximate that infinite MA with a few parameters using ARMA(p,q) models (a ratio of lag polynomials).',
+      points: ['Any covariance-stationary series = infinite weighted sum of current and past white-noise shocks', 'Requires stationarity', 'We can\'t estimate infinitely many weights', 'ARMA(p,q) approximates it with few parameters'] },
+    { id: 'within', group: 'A', skill: 'fcst', q: 'What is within-sample (holdout) forecasting and why might it pick a different model than AIC/SIC?',
+      model: 'You estimate each model on the data minus the last few periods, forecast the held-out periods, and compare forecast errors (MSE or MAE) to the actual values. AIC/SIC judge in-sample fit with a penalty, but a model that fits the past well (e.g., a 3rd-degree trend) can bend away badly when extended into the future, so the holdout test can favor a simpler model (Kamp 9/22: criteria picked the cubic, holdout picked the quadratic).',
+      points: ['Hold out the last part of the sample, estimate on the rest', 'Forecast the holdout and compare errors (MSE/MAE)', 'AIC/SIC measure in-sample fit, not forecasting', 'Over-flexible trends can fit the past and forecast badly'] },
+    { id: 'jbq', group: 'B', skill: 'norm', q: 'What does the Jarque-Bera test check, what is its null hypothesis, and how do you read RATS output for it?',
+      model: 'JB tests whether data are normally distributed using skewness (0 for a normal) and kurtosis (3 for a normal; RATS prints excess kurtosis, so 0). JB = T/6 × (S² + (K−3)²/4) follows χ² with 2 df under H₀: normal; the 5% cutoff is 5.99. In RATS, read Signif Level (JB=0): below 0.05 → reject normality (LIRA: JB 452.8, p 0.000); above 0.05 → no evidence against normality (DOLLAR: JB 0.88, p 0.65).',
+      points: ['Tests normality', 'Built from skewness and kurtosis (excess kurtosis in RATS)', 'H₀: normal; χ²₂, cutoff 5.99', 'Read Signif: p < 0.05 reject normality'] }
+  ];
+  function explain(rg, opts = {}) {
+    const pool = opts.group ? EXPLAIN.filter(e => e.group === opts.group) : EXPLAIN;
+    const e = opts.id ? EXPLAIN.find(x => x.id === opts.id) : rg.pick(pool);
+    return { gen: 'explain', title: 'Explain it in words', examRef: e.id === 'q6' ? 'Old exam Q6' : e.id === 'q7' ? 'Old exam Q7' : 'Explain-style question', stem: '', exhibits: [], parts: [textQ({ label: '', skill: e.skill, q: e.q, model: e.model, points: e.points, pts: 3 })] };
+  }
+
+  // ============ Mock exam: same structure as Kamp's old exam ============
+  function mock(seed) {
+    const rg = rng(seed);
+    const q1 = trend(rg, { mode: 'mock' });
+    // Q2: two series, one without and one with seasonality (like GG/AA)
+    const n1 = rg.pick(['GG', 'BB', 'PP']), n2 = rg.pick(['AA', 'CC', 'KK']);
+    const S1 = seasonSim(rg, 'none', false, n1) || seasonSim(rg, 'none', false, n1);
+    const S2 = seasonSim(rg, rg.pick(['moderate', 'strong']), false, n2);
+    const q2parts = seasonParts(rg, S1, 'a', { mode: 'mock', forecast: false }).concat(seasonParts(rg, S2, 'b', { mode: 'mock', forceFc: true, fcLabel: 'c' }));
+    const q2 = { gen: 'season', title: 'Seasonality in two products', examRef: 'Old exam Q2', stem: `A firm that produces two products hired you to check for seasonality in the demand for each. ${S1.name} and ${S2.name} are monthly series (${S1.T} and ${S2.T} observations). The printouts show seasonal regressions on 12 month dummies (no constant), plus graphs of actual, fitted and residuals.`,
+      exhibits: [pre(linregText(S1.o, { y0: S1.y0, full: false })), html(actFit(S1.y, S1.o.fit, S1.o.e, S1.y0, `Actual/Fitted and Residuals: ${S1.name}`)), pre(linregText(S2.o, { y0: S2.y0, full: false })), html(actFit(S2.y, S2.o.fit, S2.o.e, S2.y0, `Actual/Fitted and Residuals: ${S2.name}`))], parts: q2parts };
+    const q3 = ident(rg, { lb: true });
+    q3.title = 'ACF/PACF graph and the white-noise test'; q3.examRef = 'Kamp\'s handwritten note (the old exam skips Q3)';
+    const q4 = demand(rg, { mode: 'mock' });
+    const q5a = lagop(rg, { dir: 'pack' }), q5b = lagop(rg, { dir: 'unpack' });
+    const q5 = { gen: 'lagop', title: 'Lag operator', examRef: 'Old exam Q5', stem: q5a.stem, exhibits: [], parts: [Object.assign(q5a.parts[0], { label: 'a' }), Object.assign(q5b.parts[0], { label: 'b' }), Object.assign(q5b.parts[1], { label: 'b (p)' }), Object.assign(q5b.parts[2], { label: 'b (q)' })] };
+    const q6 = explain(rg, { id: rg.chance(0.5) ? 'q6' : rg.pick(EXPLAIN.filter(e => e.group === 'A')).id });
+    const q7 = explain(rg, { id: rg.chance(0.5) ? 'q7' : rg.pick(EXPLAIN.filter(e => e.group === 'B')).id });
+    return [q1, q2, q3, q4, q5, q6, q7].map((q, i) => Object.assign(q, { num: i + 1 }));
+  }
+
+  const DRILLS = [
+    { id: 'trend', fn: trend, name: 'Best model + forecast', sub: 'Old exam Q1', skills: ['fit', 'fcst'] },
+    { id: 'season', fn: season, name: 'Seasonality', sub: 'Old exam Q2', skills: ['seas', 'dw'] },
+    { id: 'ident', fn: ident, name: 'ACF/PACF graphs', sub: 'Kamp\'s handwritten note', skills: ['acf', 'wn'] },
+    { id: 'demand', fn: demand, name: 'Demand & elasticities', sub: 'Old exam Q4', skills: ['elas', 'dw'] },
+    { id: 'lagop', fn: lagop, name: 'Lag operator', sub: 'Old exam Q5', skills: ['lag'] },
+    { id: 'explain', fn: explain, name: 'Explain questions', sub: 'Old exam Q6, Q7', skills: ['fit', 'stat', 'wn', 'acf', 'dw', 'seas'] },
+    { id: 'tests', fn: tests, name: 'Normality & white-noise tests', sub: 'Kamp\'s handwritten note', skills: ['norm', 'wn'] },
+    { id: 'stationarity', fn: stationarity, name: 'Stationarity & fixes', sub: 'Old exam Q7 + 10/1, 10/6', skills: ['stat'] },
+    { id: 'readout', fn: readout, name: 'Reading a printout', sub: 'Every printout question', skills: ['read', 'dw'] },
+    { id: 'armamath', fn: armamath, name: 'MA/AR properties', sub: 'Lectures 10/13, 10/15', skills: ['arma'] },
+    { id: 'forecasting', fn: forecasting, name: 'Forecast extras', sub: 'Lectures 9/22, 9/29', skills: ['fcst', 'seas'] },
+    { id: 'transforms', fn: transforms, name: 'Growth, logs, real values', sub: 'Lecture 9/3', skills: ['trans'] }
+  ];
+
+  return { trend, season, seasonSim, demand, lagop, ident, simIdent, tests, armamath, readout, transforms, forecasting, stationarity, explain, mock, DRILLS, EXPLAIN, BANDS, ID_OPTS, mcFixed, numQ, textQ, pre, html, DUMORDER };
+})();
+
+
+/* ===== CONTENT: skills, lessons (lecture order), Kamp's real old exam ===== */
+const C = (() => {
+  const SKILLS = {
+    read: { name: 'Reading a RATS printout', lesson: 'l02', drill: 'readout', w: 1 },
+    fit: { name: 'Best model: R̄², AIC, SBC', lesson: 'l03', drill: 'trend', w: 1.3 },
+    fcst: { name: 'Forecasts & TIME', lesson: 'l05', drill: 'trend', w: 1.2 },
+    seas: { name: 'Seasonality', lesson: 'l06', drill: 'season', w: 1.3 },
+    elas: { name: 'Coefficients & elasticities', lesson: 'l04', drill: 'demand', w: 1.3 },
+    dw: { name: 'Serial correlation (DW)', lesson: 'l03', drill: 'readout', w: 1 },
+    lag: { name: 'Lag operator & ARMA(p,q)', lesson: 'l10', drill: 'lagop', w: 1 },
+    stat: { name: 'Stationarity & fixes', lesson: 'l08', drill: 'stationarity', w: 1 },
+    acf: { name: 'ACF/PACF identification', lesson: 'l13', drill: 'ident', w: 1.3 },
+    wn: { name: 'White noise & Ljung-Box', lesson: 'l11', drill: 'tests', w: 1 },
+    norm: { name: 'Normality (Jarque-Bera)', lesson: 'l02', drill: 'tests', w: 0.8 },
+    arma: { name: 'MA/AR properties', lesson: 'l12', drill: 'armamath', w: 0.7 },
+    trans: { name: 'Growth, logs, real values', lesson: 'l04', drill: 'transforms', w: 0.5 }
+  };
+
+  const L = [];
+  const add = o => L.push(o);
+
+  add({ id: 'l01', date: 'Aug 25', title: 'Regression review', skills: ['read'],
+    take: 'A regression draws the best-fitting line through data. The gap between each real point and the line is a residual, and OLS picks the line that makes the squared gaps as small as possible.',
+    body: `
+<h3>In plain English</h3>
+<p>Say you want to explain ice-cream sales (<b>y</b>, the thing you're explaining, called the <dfn>dependent variable</dfn>) with temperature (<b>x</b>, the thing doing the explaining, an <dfn>independent variable</dfn>). You plot every day as a dot and draw a line through the cloud.</p>
+<ul>
+<li>The line's <dfn>fitted value</dfn> ŷ ("y-hat") is what the line <i>predicts</i> for that day.</li>
+<li>The <dfn>residual</dfn> e = actual − fitted. It's the miss. <b>Negative = the line guessed too high.</b> Positive = too low.</li>
+<li><dfn>OLS</dfn> (ordinary least squares) = the rule for drawing the line: square every miss (so negatives don't cancel positives), add them up, and pick the line with the smallest total. That total is the <dfn>sum of squared residuals</dfn>, Σe².</li>
+</ul>
+{{fig:residual}}
+<h3>The formula, with real numbers</h3>
+<p><span class="eq">y<sub>t</sub> = β<sub>0</sub> + β<sub>1</sub>x<sub>t</sub> + ε<sub>t</sub></span>. β<sub>0</sub> is the starting value (the constant), β<sub>1</sub> the slope (how much y changes when x rises by 1), ε<sub>t</sub> the random shock we can't explain. The subscript t means "at time t" (this month).</p>
+<p>Example: fitted line sales = 200 + 15 × temp. On an 80° day the line predicts 200 + 15×80 = 1,400. Actual sales were 1,350, so the residual = 1,350 − 1,400 = <b>−50</b> (line too high).</p>
+<h3>Gauss-Markov: when OLS is the best you can do</h3>
+<p>If these rules hold, OLS is <dfn>BLUE</dfn>: the <b>B</b>est (least wobbly) <b>L</b>inear <b>U</b>nbiased (right on average) <b>E</b>stimator.</p>
+<ol>
+<li>A1: the model is linear in the β's.</li>
+<li>A2: the shocks average zero.</li>
+<li>A3: the shocks have the same spread every period (constant variance).</li>
+<li><b>A4: the shocks are not correlated with each other (no serial correlation).</b> This is the one time series breaks all the time: if this month's miss is high, next month's often is too.</li>
+<li>A5: x isn't correlated with the shocks.</li>
+</ol>
+<h3>On the exam</h3>
+<p>You won't run OLS by hand. You'll read its output: the Coeff column gives β's, a residual question asks for actual − fitted, and "serial correlation" questions are about A4 breaking.</p>`,
+    check: [
+      { q: 'Actual = 820, fitted = 845. The residual is…', options: ['−25 (the line guessed too high)', '+25 (the line guessed too low)', '1,665'], answer: 0, explain: 'Residual = actual − fitted = 820 − 845 = −25. Negative means the line was above the dot.' },
+      { q: 'What does OLS minimize?', options: ['The sum of squared residuals', 'The sum of residuals', 'The number of variables'], answer: 0, explain: 'Squaring stops positive and negative misses from cancelling; OLS makes Σe² as small as possible.' },
+      { q: 'Which Gauss-Markov assumption is the big problem in time series?', options: ['No serial correlation (errors not correlated over time)', 'The model is linear', 'The shocks average zero'], answer: 0, explain: 'Time series misses tend to come in runs, breaking A4. Then OLS is no longer BLUE.' }
+    ] });
+
+  add({ id: 'l02', date: 'Aug 27', title: 'Graphing and reading RATS output', skills: ['read', 'norm'],
+    take: 'Always graph your data, then read the printout top to bottom: how many months, how much is explained, how big the typical miss is, and which ingredients matter.',
+    body: `
+<h3>The printout, line by line</h3>
+<table class="mini"><tr><th>Line</th><th>What it means in plain words</th><th>Good is…</th></tr>
+<tr><td>Usable Observations</td><td>T, how many months of data</td><td></td></tr>
+<tr><td>Degrees of Freedom</td><td>T − K, where K = number of things estimated (constant + each variable)</td><td></td></tr>
+<tr><td>Centered R^2</td><td>Share of the series' up-and-down the model explains (0 to 1)</td><td>Higher</td></tr>
+<tr><td>R-Bar^2</td><td>Same, with a small fee per ingredient</td><td>Higher</td></tr>
+<tr><td>Uncentered R^2</td><td>Ignore it</td><td></td></tr>
+<tr><td>Std Error of Dependent Variable</td><td>How much the series swings around <i>its own average</i></td><td></td></tr>
+<tr><td>Standard Error of Estimate</td><td>The typical size of a miss <i>after</i> the model</td><td>Smaller</td></tr>
+<tr><td>Coeff / Signif</td><td>The number in the equation / does this ingredient really matter? (below 0.05 = yes)</td><td>Signif &lt; 0.05</td></tr></table>
+<h3>The two "Std Error" lines, with Kamp's lira numbers</h3>
+<p><span class="eq">Std Error of Dep. Var = √[Σ(y − ȳ)² / (T − 1)]</span> and <span class="eq">Standard Error of Estimate = √[Σe² / (T − K)]</span>.</p>
+{{fig:spread}}
+<p>For LIRA (quadratic trend): the series swings about <b>12.81</b> around its average; after the trend line, the typical miss is <b>5.08</b>. The model removed most of the swing: R² ≈ 1 − (5.08 / 12.81)² = 1 − 0.157 = <b>0.84</b>, matching the printed 0.8436. In a one-variable regression R² also equals the correlation squared (r²).</p>
+<h3>Moments and the Jarque-Bera normality test</h3>
+<p>RATS's STATISTICS command prints the shape of the data:</p>
+<ul><li><dfn>Skewness</dfn>: is the histogram lopsided? Normal = 0. Positive = a long tail to the right.</li>
+<li><dfn>Kurtosis</dfn>: how fat are the tails (how many extreme values)? Normal = 3. <b>RATS prints excess kurtosis = kurtosis − 3, so normal = 0.</b></li>
+<li><dfn>Jarque-Bera (JB)</dfn> combines both into one "fever reading": <span class="eq">JB = T/6 × (S² + (K−3)²/4)</span>. Think thermometer: 0 = perfectly bell-shaped. The fever line is <b>5.99</b> (the 5% cutoff for χ² with 2 df). Above it → not normal.</li></ul>
+{{fig:jb}}
+<p><b>H₀ (the default): the data are normal.</b> Read "Signif Level (JB=0)": below 0.05 → reject normality. DOLLAR: JB 0.88, Signif 0.65 → fail to reject, looks normal. LIRA: JB 452.8, Signif 0.000 → definitely not normal (it explodes upward late in the sample, giving a long right tail).</p>
+<h3>On the exam</h3>
+<p>Kamp's handwritten note says to know "the tests for normality." Expect: state H₀, read the Signif, conclude. Possibly compute JB from S, K, T.</p>`,
+    check: [
+      { q: 'Std Error of Dependent Variable = 20, Standard Error of Estimate = 10. Roughly what is R²?', options: ['0.75', '0.50', '0.25'], answer: 0, explain: '1 − (10/20)² = 1 − 0.25 = 0.75. The model removed three-quarters of the squared swing.' },
+      { q: 'RATS prints "Kurtosis (excess) 0.12". The data are…', options: ['About normal in the tails (normal excess = 0)', 'Very thin-tailed (normal = 3)', 'Not normal for sure'], answer: 0, explain: 'Excess kurtosis subtracts 3, so 0 is normal. 0.12 is close.' },
+      { q: 'JB = 3.1, Signif 0.21. Conclusion?', options: ['Fail to reject normality', 'Reject normality', 'The series is white noise'], answer: 0, explain: '3.1 is below the 5.99 fever line; Signif 0.21 > 0.05. No evidence against normality.' }
+    ] });
+
+  add({ id: 'l03', date: 'Sep 1', title: 'Goodness of fit, AIC/SIC and Durbin-Watson', skills: ['fit', 'dw'],
+    take: 'To compare models, use judges that charge a fee for every ingredient: R̄² (higher wins), AIC and SIC (lower wins; SIC charges the most). Durbin-Watson checks whether misses come in runs.',
+    body: `
+<h3>Why plain R² can't pick a model</h3>
+<p><span class="eq">R² = 1 − Σe² / Σ(y − ȳ)²</span>. Adding <i>any</i> variable, even the number of letters in the month's name, can only make Σe² smaller or the same, so R² never goes down. Pick by R² and you'd always pick the model stuffed with junk. So we use judges with a penalty.</p>
+<h3>The three judges</h3>
+<table class="mini"><tr><th>Judge</th><th>Formula (Kamp 9/1)</th><th>Penalty per extra variable</th><th>Better is</th></tr>
+<tr><td>R̄²</td><td>1 − [Σe²/(T−K)] / [Σ(y−ȳ)²/(T−1)]</td><td>Smallest (degrees of freedom only)</td><td>Higher</td></tr>
+<tr><td>AIC</td><td>e<sup>2K/T</sup> × Σe²/T</td><td>Medium</td><td>Lower</td></tr>
+<tr><td>SIC (RATS: SBC)</td><td>T<sup>K/T</sup> × Σe²/T</td><td>Largest (when T ≥ 8)</td><td>Lower</td></tr></table>
+<p>Every judge = <b>average squared miss × a complexity tax</b>. A bigger model only wins if its extra ingredients cut the misses by more than the tax.</p>
+<h3>Small numbers you can check with a calculator</h3>
+<p>T = 100. Model A: K = 2, Σe² = 500 (average miss² = 5.00). Model B: K = 4, Σe² = 470 (4.70, about 6% better).</p>
+{{fig:aicsic}}
+<p>AIC: A = 5.00 × e<sup>0.04</sup> = 5.00 × 1.041 = 5.20; B = 4.70 × e<sup>0.08</sup> = 4.70 × 1.083 = 5.09 → <b>AIC picks B</b>. SIC: A = 5.00 × 100<sup>0.02</sup> = 5.00 × 1.096 = 5.48; B = 4.70 × 100<sup>0.04</sup> = 4.70 × 1.202 = 5.65 → <b>SIC picks A</b>. Same data, different winners, because SIC's tax is bigger. Memory hook: <b>"AIC has the 2, SIC has the T."</b></p>
+<p>RATS prints them as logs (that's why you see 12.041 instead of a huge number): log AIC = log(Σe²/T) + 2K/T, log SIC = log(Σe²/T) + K·ln(T)/T. Lower still wins.</p>
+<h3>Durbin-Watson: do the misses come in runs?</h3>
+<p><span class="eq">DW = Σ(e<sub>t</sub> − e<sub>t−1</sub>)² / Σe<sub>t</sub>²</span> ≈ 2(1 − ρ), where ρ is the correlation between this month's miss and last month's.</p>
+{{fig:dw}}
+<ul><li><b>About 2</b>: misses look random. Fine.</li><li><b>Toward 0</b>: <dfn>positive serial correlation</dfn>: a positive miss tends to follow a positive miss (long stretches above or below zero). A4 is broken, OLS isn't BLUE, Signif values look better than they are.</li><li>Toward 4: negative serial correlation (rare).</li></ul>
+<p>Limitation: DW only looks one month back, so it can miss a lag-12 (seasonal) pattern.</p>
+<h3>On the exam</h3>
+<p>Q1 asks "which model is the best fit and why": line up R̄², AIC, SBC; check for an insignificant variable. Q6 asks what differentiates R̄², AIC and SIC. Q2 and Q4 ask about serial correlation: quote the DW.</p>`,
+    check: [
+      { q: 'Model X: AIC 8.21, SBC 8.30. Model Y: AIC 8.19, SBC 8.33. Which does SBC prefer?', options: ['X (lower SBC)', 'Y (lower AIC)', 'Neither'], answer: 0, explain: 'SBC: lower wins → X (8.30 < 8.33). They disagree because SBC taxes extra variables more; SBC usually prefers the smaller model.' },
+      { q: 'DW = 0.35. That means…', options: ['Positive serial correlation: misses come in runs', 'No serial correlation', 'Negative serial correlation'], answer: 0, explain: 'Near 0 = positive serial correlation.' },
+      { q: 'Why not compare models with plain R²?', options: ['It never falls when you add a variable, even a useless one', 'It is always negative', 'RATS doesn\'t print it'], answer: 0, explain: 'Plain R² rewards stuffing in variables; the other three judges charge a penalty.' }
+    ] });
+
+  add({ id: 'l04', date: 'Sep 3', title: 'Growth rates, logs and elasticities', skills: ['elas', 'trans'],
+    take: 'Logs turn percentage changes into simple differences. In a log-log regression every coefficient is an elasticity: the % change in y when x rises 1%.',
+    body: `
+<h3>Real vs nominal</h3>
+<p><dfn>Nominal</dfn> = in today's dollars. <dfn>Real</dfn> = inflation removed: <span class="eq">real = nominal ÷ CPI × 100</span>. A $50 price when CPI = 250 is $20 in base-year dollars. "All money variables are in real terms" in Q4 means this was already done.</p>
+<p>An <dfn>index number</dfn> rescales a series so the base period = 100: value ÷ base value × 100.</p>
+<h3>Growth rates and logs</h3>
+<p>Growth = (new − old)/old × 100. From 200 to 210: 5%. Shortcut with logs: 100 × (ln 210 − ln 200) = 4.88%, close. <b>Differences in logs ≈ growth rates.</b> Logs also turn steady % growth (a curve that shoots up) into a straight line, and steady a variance that grows with the level.</p>
+{{fig:loglin}}
+<h3>Elasticity: the "percent per percent" number</h3>
+<p><dfn>Elasticity</dfn> = % change in quantity ÷ % change in the other variable. In a <dfn>log-log model</dfn> (log y on log x's, the "L" in front of a name means "log of"), each coefficient <i>is</i> the elasticity.</p>
+<table class="mini"><tr><th>Question wording</th><th>Row</th><th>Rule</th><th>Example</th></tr>
+<tr><td>"Elasticity of demand" (own price)</td><td>LPRICE</td><td>Ignore the sign: |e| &gt; 1 elastic, &lt; 1 inelastic</td><td>−1.30 → elastic</td></tr>
+<tr><td>"Cross-price elasticity with good j"</td><td>LPRICEJ</td><td>Sign only: + substitute, − complement</td><td>0.40 → substitute</td></tr>
+<tr><td>"Income elasticity"</td><td>LINCOME</td><td>&lt; 0 inferior, 0–1 necessity, &gt; 1 luxury</td><td>0.30 → necessity</td></tr></table>
+<p>In a <b>linear</b> model, read signs: another good's price + → <dfn>substitute</dfn> (Coke/Pepsi: Pepsi pricier → more Coke); − → <dfn>complement</dfn> (hot dogs/buns). Income + → <dfn>normal good</dfn>; − → <dfn>inferior</dfn> (instant ramen). Only trust a sign if Signif &lt; 0.05. A linear model's elasticity at the averages = slope × x̄/ȳ (example: slope −300,000, x̄ = 1.5, ȳ = 500,000 → −300,000 × 1.5 / 500,000 = −0.90).</p>
+<h3>Other log shapes (10/15 recap)</h3>
+<ul><li>Linear trend y = α + βTIME: β = average change in y per month.</li><li>Log-linear trend log y = α + βTIME: β × 100 = average % change per month.</li><li>Log-log: β = elasticity.</li></ul>
+<h3>On the exam</h3>
+<p>Q4: significance, substitutes/complements, normal/inferior from the linear model; elasticities and necessity/luxury from the log-log model; DW for serial correlation.</p>`,
+    check: [
+      { q: 'Log-log model: LINCOME = 1.42. The good is…', options: ['A luxury (income elasticity > 1)', 'A necessity', 'Inferior'], answer: 0, explain: 'Above 1 = luxury: a 1% income rise raises quantity 1.42%.' },
+      { q: 'Linear model: PRICEJ = −8,200 (Signif 0.000). Good j is…', options: ['A complement', 'A substitute', 'Inferior'], answer: 0, explain: 'Negative: j gets pricier → we buy less of our good too. Used together.' },
+      { q: 'LPRICE = −0.62. Demand is…', options: ['Inelastic', 'Elastic', 'A luxury'], answer: 0, explain: '|−0.62| < 1 → inelastic.' }
+    ] });
+
+  add({ id: 'l05', date: 'Sep 22', title: 'Trend models, forecasts and intervals', skills: ['fcst', 'fit'],
+    take: 'A trend forecast is the fitted equation with a future TIME plugged in. TIME is the running month count, not the month number or the year.',
+    body: `
+<h3>The trend models</h3>
+{{fig:trends}}
+<table class="mini"><tr><th>Model</th><th># line</th><th>Shape</th><th>Forecast</th></tr>
+<tr><td>Linear</td><td>Constant TIME</td><td>Straight line</td><td>a + b × TIME</td></tr>
+<tr><td>2nd degree</td><td>Constant TIME TIMESQ</td><td>Curve</td><td>a + b × TIME + c × TIME²</td></tr>
+<tr><td>Quadratic</td><td>Constant TIMESQ</td><td>Curve, flat at the start</td><td>a + c × TIME²</td></tr>
+<tr><td>Log-linear</td><td>log y on Constant TIME</td><td>Constant % growth</td><td>e<sup>(a + b × TIME)</sup></td></tr></table>
+<h3>Finding TIME</h3>
+<p><code>SET TIME = T</code> makes TIME = 1 in the first month, 2 in the second… With Jan 1987 – Dec 2016 (30 years × 12 = 360), Dec 2016 = 360, Jan 2017 = 361, June 2017 = 366, Dec 2017 = 372.</p>
+<h3>A worked forecast</h3>
+<p>Say DD = 10,000 − 0.004 × TIME². June 2017: TIME = 366, TIME² = 133,956, × 0.004 = 535.82, so DD ≈ 10,000 − 535.82 = <b>9,464.18</b>. Calculator order: square TIME → multiply → subtract.</p>
+<h3>Forecast intervals</h3>
+<p>A forecast is a best guess, not a promise. <span class="eq">95% interval = forecast ± 1.96 × forecast standard error</span>. Forecast 9,500 with SE 300 → 8,912 to 10,088.</p>
+<h3>Within-sample (holdout) forecasting</h3>
+<p>Hide the last part of the data, fit each model on the rest, forecast the hidden months, and compare the errors: <dfn>MSE</dfn> = average squared error, <dfn>MAE</dfn> = average absolute error. Lower wins. Kamp 9/22: the information criteria chose a 3rd-degree trend, but the holdout test chose the quadratic, because a very bendy curve fits the past and then swings off into the future.</p>
+<h3>On the exam</h3>
+<p>Q1(c): forecast two months with the chosen model. Write the equation, find TIME, plug in, show your work.</p>`,
+    check: [
+      { q: 'Data run Jan 2000 – Dec 2019 (TIME = 1 in Jan 2000). TIME for March 2020?', options: ['243', '3', '2020'], answer: 0, explain: '20 years × 12 = 240 = Dec 2019. Jan 2020 = 241, March = 243.' },
+      { q: 'y = 500 + 2 × TIME. Forecast for TIME = 250?', options: ['1,000', '502', '750'], answer: 0, explain: '500 + 2 × 250 = 1,000.' },
+      { q: 'Forecast 1,000, SE 50. 95% interval?', options: ['902 to 1,098', '950 to 1,050', '900 to 1,100 exactly'], answer: 0, explain: '1,000 ± 1.96 × 50 = 1,000 ± 98.' }
+    ] });
+
+  add({ id: 'l06', date: 'Sep 24', title: 'Seasonal dummies', skills: ['seas'],
+    take: 'Regress the series on 12 month switches (no constant). Each coefficient is that month\'s average. Seasonality = the months differ from each other.',
+    body: `
+<h3>Month switches (dummy variables)</h3>
+<p>A <dfn>dummy variable</dfn> is a 0/1 switch. JAN = 1 in every January and 0 otherwise; same for each month. In any month exactly one switch is on, so <b>each coefficient = that month's average</b> (GG's JAN 10,090.59 = the average of 30 Januaries).</p>
+<p>No constant: the 12 switches always add up to 1, the same as a constant column, so including both is perfectly redundant (the <dfn>dummy-variable trap</dfn>) and RATS can't estimate it.</p>
+{{fig:season}}
+<h3>Is there seasonality? Three numeric clues</h3>
+<ol><li><b>Spread of the month coefficients.</b> Put them back in calendar order. GG: 9,502 to 10,317 (flat). AA: 13,920 in Jan to 24,160 in May (big swing).</li>
+<li><b>Centered R²</b> with Kamp's rules: below 0.10 no real evidence · 0.10–0.25 maybe 1–2 months differ · 0.25–0.50 some evidence, take a closer look · 0.50–0.75 probably model it · 0.75+ have to model it. GG 0.043; AA 0.41.</li>
+<li><b>Significance Level of F</b>: tests "are all 12 month averages the same?" Below 0.05 → they differ. GG 0.156; AA 0.000.</li></ol>
+<p class="warn"><b>The trap:</b> every month's own Signif is 0.000 in both GG and AA. That only says "this month's average isn't zero", which is obvious for sales. It says nothing about months differing from each other.</p>
+<h3>Reading the graph</h3>
+<ul><li>A peak at the same spot every year (30 peaks in 30 years) → seasonality.</li><li>Random zigzag → noise.</li><li>Residuals that stay above or below zero for years → a leftover cycle (serial correlation; AA's DW = 0.14).</li></ul>
+<h3>RATS order</h3>
+<p>RATS lists the months <b>DEC NOV OCT SEP AUG JUL JUN MAY APR MAR JAN FEB</b>. Always find a month <b>by name</b>, never by row number.</p>
+<h3>On the exam</h3>
+<p>Q2: decide seasonality for two series with the three clues plus the graph, then forecast a month (= that month's coefficient).</p>`,
+    check: [
+      { q: 'Seasonal regression: R² = 0.06, F Signif = 0.31. Seasonality?', options: ['No significant evidence', 'Yes, strong', 'Yes, because every month is significant'], answer: 0, explain: 'R² below 0.10 and F p > 0.05: the months don\'t differ.' },
+      { q: 'Dummies-only model. Forecast for next April?', options: ['The APR coefficient', 'The average of all coefficients', 'APR coefficient × TIME'], answer: 0, explain: 'Each coefficient is that month\'s average; with no trend, that is the forecast.' },
+      { q: 'Why no constant?', options: ['The 12 dummies already add up to 1 (dummy trap)', 'Constants are never allowed', 'To make R² bigger'], answer: 0, explain: 'Constant + 12 dummies = perfect collinearity.' }
+    ] });
+
+  add({ id: 'l07', date: 'Sep 29', title: 'Seasonal forecasting and seasonal differencing', skills: ['seas', 'fcst', 'stat'],
+    take: 'With dummies + TIME, forecast = month coefficient + TIME coefficient × TIME. A seasonal difference (this month minus the same month last year) wipes out a repeating yearly pattern.',
+    body: `
+<h3>Dummies plus a trend</h3>
+<p>Kamp's Florida farm jobs: month dummies + TIME. Forecast March 2017 = MAR coefficient + TIME coefficient × TIME = 118,465 − 149.5 × 207 (his board example). Same plug-in idea as Q1, just starting from the month's number.</p>
+<h3>Seasonal differencing</h3>
+<p><span class="eq">D<sub>t</sub> = y<sub>t</sub> − y<sub>t−12</sub></span>: compare each June with last June. The summer collapse cancels because both Junes have it. In lag-operator form: (1 − L<sup>12</sup>)y<sub>t</sub>.</p>
+<div class="imgpair">{{img:farm_before|Raw farm employment: collapses every summer and slides lower each year}}{{img:farm_after|After a seasonal difference: no summer collapse, hovers around a steady level (≈ −2,000 vs. a year earlier)}}</div>
+<p>To forecast from a model of D: forecast of y = last year's same-month value + the forecast change.</p>
+<p class="warn"><b>Watch out:</b> on 9/29 Kamp's June forecast used the JUL coefficient (−823.5) instead of JUN (−2,061.6). Find the month by name.</p>`,
+    check: [
+      { q: 'Model: dummies + TIME. JUL = 5,000, TIME coef = 3, TIME = 250. Forecast?', options: ['5,750', '5,003', '750'], answer: 0, explain: '5,000 + 3 × 250 = 5,750.' },
+      { q: 'A seasonal difference for monthly data is…', options: ['y(t) − y(t−12)', 'y(t) − y(t−1)', 'y(t) / y(t−12)'], answer: 0, explain: 'Same month, one year back.' },
+      { q: 'Last June = 100,000; the seasonally differenced model predicts June\'s change = −2,000. Forecast?', options: ['98,000', '−2,000', '102,000'], answer: 0, explain: 'Last year\'s June + change.' }
+    ] });
+
+  add({ id: 'l08', date: 'Oct 1', title: 'Cycles and covariance stationarity', skills: ['stat'],
+    take: 'Stationary = the series behaves the same in every slice of time: steady average, steady wiggle, and links to its past that depend only on how far back you look. Cycles are allowed.',
+    body: `
+<h3>The definition, piece by piece</h3>
+<p>A series is <dfn>covariance stationary</dfn> when:</p>
+<ol><li><b>Constant mean</b>: E(y<sub>t</sub>) = μ for every t. No drift up or down.</li>
+<li><b>Constant variance</b>: the wiggle is the same size in 1990 and 2020.</li>
+<li><b>Autocovariance depends only on the lag τ</b>: the link between y<sub>t</sub> and y<sub>t−τ</sub> (γ(τ) = Cov(y<sub>t</sub>, y<sub>t−τ</sub>)) is the same whatever the date.</li></ol>
+<p>The <dfn>autocorrelation</dfn> ρ(τ) = γ(τ)/γ(0) is that link scaled to −1…1. γ(0) is just the variance.</p>
+{{fig:stationary}}
+<table class="mini"><tr><th>Level</th><th>Trend or season?</th><th>Cycle?</th><th>Examples</th><th>Next step</th></tr>
+<tr><td>Non-stationary</td><td>Yes</td><td>Maybe</td><td>EMP, FARMEMP, GDP</td><td>Detrend, deseasonalize or difference</td></tr>
+<tr><td>Stationary</td><td>No</td><td>Maybe</td><td>AR1A, MA1A, residuals</td><td>Model the cycle with AR/MA</td></tr>
+<tr><td>White noise</td><td>No</td><td>No</td><td>WN</td><td>Done: nothing left to predict</td></tr></table>
+<p><b>Every white noise series is stationary; not every stationary series is white noise.</b></p>
+<h3>Why it matters</h3>
+<p>ACF/PACF and AR/MA models need stable relationships. A trending series looks "connected to its past" just because it drifts: EMP's autocorrelations stay near 1 for 25 lags.</p>`,
+    check: [
+      { q: 'A series cycles above and below a steady average. Stationary?', options: ['Yes: cycles are allowed', 'No: any pattern breaks stationarity', 'Only if it is white noise'], answer: 0, explain: 'Steady mean and variance → stationary, cycle and all.' },
+      { q: 'A series rises steadily over 30 years. Stationary?', options: ['No: the mean drifts', 'Yes, if the rise is straight', 'Yes'], answer: 0, explain: 'A trend means the average changes over time.' },
+      { q: 'ρ(τ) equals…', options: ['γ(τ) / γ(0)', 'γ(0) / γ(τ)', 'γ(τ) × T'], answer: 0, explain: 'Autocovariance at lag τ divided by the variance.' }
+    ] });
+
+  add({ id: 'l09', date: 'Oct 6', title: 'Making data stationary', skills: ['stat'],
+    take: 'Two fixes: regress the trend or season out and keep the residuals, or difference the data (first difference for a trend, seasonal difference for a season).',
+    body: `
+<h3>Method 1: regress it out, use the residuals</h3>
+<ul><li>Trend: regress on TIME (and TIME² if it bends) = <dfn>detrending</dfn>.</li>
+<li>Season: regress on month dummies = <dfn>deseasonalizing</dfn>.</li>
+<li>Both: one regression with both. Kamp's farm jobs: dummies + TIME → the residuals DTSRESIDS.</li></ul>
+<p>The residuals are what's left after removing the predictable part: that's the stationary series you model.</p>
+<h3>Method 2: difference</h3>
+<ul><li>Trend: <dfn>first difference</dfn> y<sub>t</sub> − y<sub>t−1</sub> = (1 − L)y<sub>t</sub>. A steady climb becomes a steady change.</li>
+<li>Season: <dfn>seasonal difference</dfn> y<sub>t</sub> − y<sub>t−12</sub> = (1 − L<sup>12</sup>)y<sub>t</sub>.</li>
+<li>Both: one of each. DDFARMEMP (both differences) came closest to white noise.</li></ul>
+<p>Bonus: <b>logs</b> steady a variance that grows over time.</p>
+<h3>On the exam (old Q7)</h3>
+<p>"Give two methods to work with non-stationary series": (1) regress out trend/season and use the residuals; (2) difference (first and/or seasonal). Mention logs for a growing variance.</p>`,
+    check: [
+      { q: 'Which removes a monthly seasonal pattern?', options: ['y(t) − y(t−12)', 'y(t) − y(t−1) only', 'Taking logs only'], answer: 0, explain: 'The seasonal difference compares the same months.' },
+      { q: 'After regressing y on TIME, which series do you model as stationary?', options: ['The residuals', 'The fitted values', 'TIME'], answer: 0, explain: 'Residuals = y with the trend removed.' },
+      { q: 'What do logs help with?', options: ['A variance that grows over time', 'Seasonality', 'Serial correlation'], answer: 0, explain: 'Logs shrink big values more than small ones.' }
+    ] });
+
+  add({ id: 'l10', date: 'Oct 8', title: 'White noise, the lag operator and Wold', skills: ['lag', 'wn'],
+    take: 'White noise is pure unpredictable shock. L is the "go back one period" button. Wold says any stationary series is a weighted sum of past shocks, which ARMA models approximate.',
+    body: `
+<h3>White noise</h3>
+<p>ε<sub>t</sub> ~ WN(0, σ²): mean 0, constant variance σ², and <b>no correlation with any of its own past values</b>. Knowing the past tells you nothing about the next value. Independent white noise: the values are fully independent; Gaussian white noise: also normally distributed.</p>
+<p><dfn>Unconditional</dfn> mean/variance = the long-run average and spread. <dfn>Conditional</dfn> = given what you know so far (the information set Ω<sub>t−1</sub>). For white noise both means are 0, because the past doesn't help.</p>
+<h3>The lag operator</h3>
+{{fig:lag}}
+<p>L·y<sub>t</sub> = y<sub>t−1</sub>, L²·y<sub>t</sub> = y<sub>t−2</sub>, L<sup>k</sup>·y<sub>t</sub> = y<sub>t−k</sub>. The power on L = how many periods back. First difference (1 − L)y<sub>t</sub>; seasonal difference (1 − L<sup>12</sup>)y<sub>t</sub>.</p>
+<p><b>Pack</b> (normal → lag form): rewrite every past term as an L-power times the present term, then pull the present term out. y<sub>t</sub> − 0.4y<sub>t−1</sub> = ε<sub>t</sub> + 0.3ε<sub>t−1</sub> − 0.05ε<sub>t−2</sub> → (1 − 0.4L)y<sub>t</sub> = (1 + 0.3L − 0.05L²)ε<sub>t</sub>.</p>
+<p><b>Unpack</b> (lag form → normal): multiply out. (1 − 0.2L + 0.03L²)y<sub>t</sub> = (1 + 0.6L − 0.03L³)ε<sub>t</sub> → y<sub>t</sub> − 0.2y<sub>t−1</sub> + 0.03y<sub>t−2</sub> = ε<sub>t</sub> + 0.6ε<sub>t−1</sub> − 0.03ε<sub>t−3</sub>. <b>No L² on the right → no ε<sub>t−2</sub>.</b></p>
+<p>If a past y sits on the RIGHT (y<sub>t</sub> = 0.4y<sub>t−1</sub> + ε<sub>t</sub>), move it left first: its sign flips → (1 − 0.4L)y<sub>t</sub> = ε<sub>t</sub>.</p>
+<h3>ARMA(p, q)</h3>
+<p>Past y's = the <dfn>AR</dfn> (autoregressive) part; the highest L-power on the y side = <b>p</b>. Past shocks = the <dfn>MA</dfn> (moving average) part; highest power on the ε side = <b>q</b>. Old exam Q5a is ARMA(1,2); Q5b is ARMA(2,3).</p>
+<h3>Wold's theorem</h3>
+<p>Any covariance-stationary series (minus anything perfectly predictable) can be written as <span class="eq">y<sub>t</sub> = Σ b<sub>i</sub>ε<sub>t−i</sub></span>, b<sub>0</sub> = 1, Σb<sub>i</sub>² finite: a weighted sum of today's and all past shocks. Infinitely many weights can't be estimated, so we approximate with a few: that's what ARMA(p,q) does.</p>`,
+    check: [
+      { q: 'L³·ε(t) = ?', options: ['ε(t−3)', 'ε(t+3)', '3ε(t)'], answer: 0, explain: 'Power = periods back.' },
+      { q: '(1 − 0.5L)y(t) = (1 + 0.2L²)ε(t) in normal form:', options: ['y(t) − 0.5y(t−1) = ε(t) + 0.2ε(t−2)', 'y(t) − 0.5y(t−1) = ε(t) + 0.2ε(t−1)', 'y(t) + 0.5y(t−1) = ε(t) + 0.2ε(t−2)'], answer: 0, explain: 'Keep exactly the powers you see; L² → two periods back.' },
+      { q: 'That model is ARMA(?, ?)', options: ['ARMA(1, 2)', 'ARMA(2, 1)', 'ARMA(1, 1)'], answer: 0, explain: 'Highest power on y: 1; on ε: 2.' }
+    ] });
+
+  add({ id: 'l11', date: 'Oct 13', title: 'Q-tests and MA processes', skills: ['wn', 'arma', 'acf'],
+    take: 'The Ljung-Box Q test checks many autocorrelations at once (H₀: white noise). An MA(q) remembers the last q shocks, so its ACF cuts off after lag q.',
+    body: `
+<h3>Sample autocorrelations and their bands</h3>
+<p>ρ̂(τ) = Σ(y<sub>t</sub> − ȳ)(y<sub>t−τ</sub> − ȳ) / Σ(y<sub>t</sub> − ȳ)². If the series is white noise, each ρ̂(τ) ≈ N(0, 1/T), so 95% of them land within <b>±2/√T</b>. With T = 312: ±0.113. A bar outside the band = significant.</p>
+<h3>Box-Pierce and Ljung-Box</h3>
+<p>Instead of eyeballing bars one at a time, square the first m autocorrelations and add them up:</p>
+<p><span class="eq">Q<sub>BP</sub> = T Σ<sub>τ=1..m</sub> ρ̂(τ)²</span> ~ χ²<sub>m</sub> (works with big samples) and <span class="eq">Q<sub>LB</sub> = T(T+2) Σ ρ̂(τ)²/(T−τ)</span> (adjusted for smaller samples). <b>H₀: white noise.</b> Signif below 0.05 → reject. Kamp's rule: m = √T (T = 312 → 18).</p>
+<pre class="rats">Ljung-Box Q-Statistics           (WN)
+     Lags  Statistic Signif Lvl
+       18     25.116   0.121753   → fail to reject: white noise
+
+Ljung-Box Q-Statistics           (MA1A)
+       18     88.049   0.000000   → reject: not white noise</pre>
+<h3>MA(q): a memory of the last q shocks</h3>
+<p><span class="eq">MA(1): y<sub>t</sub> = ε<sub>t</sub> + θε<sub>t−1</sub></span>. Unconditional mean 0; variance (1 + θ²)σ². Conditional mean (knowing last month's shock) θε<sub>t−1</sub>; conditional variance σ².</p>
+<p>Autocorrelation: <span class="eq">ρ(1) = θ/(1 + θ²)</span>, ρ(τ) = 0 for τ &gt; 1. With θ = 0.8: 0.8/1.64 = 0.49. ρ(1) can never exceed 0.5. y<sub>t</sub> and y<sub>t−2</sub> share no shocks, so the ACF <b>cuts off</b> after lag 1. The PACF instead dies off gradually, alternating sign when θ &gt; 0.</p>
+<div class="imgpair">{{img:k_ma1a|Kamp's MA1A (θ = 0.8): one ACF bar, then nothing}}{{img:k_ma2|Kamp's MA2: two ACF bars, then nothing}}</div>
+<p>All MA(q) processes are covariance stationary. |θ| &lt; 1 makes an MA(1) <dfn>invertible</dfn> (it can be rewritten in terms of past y's).</p>`,
+    check: [
+      { q: 'Ljung-Box Signif = 0.003. Conclusion?', options: ['Not white noise', 'White noise', 'Normal'], answer: 0, explain: 'H₀ is white noise; 0.003 < 0.05 rejects it.' },
+      { q: 'MA(1) with θ = 0.5: ρ(1) = ?', options: ['0.4', '0.5', '0.25'], answer: 0, explain: '0.5 / (1 + 0.25) = 0.4.' },
+      { q: 'With T = 400, the white-noise bands are about…', options: ['±0.10', '±0.05', '±0.20'], answer: 0, explain: '2/√400 = 2/20 = 0.10.' }
+    ] });
+
+  add({ id: 'l12', date: 'Oct 15', title: 'AR processes', skills: ['arma', 'acf'],
+    take: 'An AR(p) regresses today on its own last p values. Its ACF fades gradually (φ, φ², φ³…), while its PACF cuts off after p lags. Exam 1 material ends here.',
+    body: `
+<h3>AR(1)</h3>
+<p><span class="eq">y<sub>t</sub> = φy<sub>t−1</sub> + ε<sub>t</sub></span>, or (1 − φL)y<sub>t</sub> = ε<sub>t</sub>. Today = a fraction φ of yesterday + a new shock.</p>
+<ul><li><b>Stationary only if |φ| &lt; 1.</b> Then shocks fade: y<sub>t</sub> = ε<sub>t</sub> + φε<sub>t−1</sub> + φ²ε<sub>t−2</sub> + … (an infinite MA, Wold in action).</li>
+<li>Unconditional mean 0; variance <span class="eq">σ²/(1 − φ²)</span>. φ = 0.8, σ² = 1 → 2.78.</li>
+<li>Conditional mean φy<sub>t−1</sub>; conditional variance σ².</li>
+<li>Autocorrelation <span class="eq">ρ(τ) = φ<sup>τ</sup></span>: 0.8, 0.64, 0.51, 0.41… fades gradually. If φ &lt; 0 it flips sign every lag.</li></ul>
+<h3>Partial autocorrelations (PACF)</h3>
+<p>The <dfn>partial autocorrelation</dfn> at lag τ = the coefficient on y<sub>t−τ</sub> in a regression of y<sub>t</sub> on y<sub>t−1</sub>, …, y<sub>t−τ</sub>: the link to τ months back <i>after</i> accounting for the months in between. For an AR(1), once you know y<sub>t−1</sub>, y<sub>t−2</sub> adds nothing → PACF = φ at lag 1, then 0. <b>AR(p): PACF nonzero for the first p lags, then 0.</b></p>
+<div class="imgpair">{{img:k_ar1a|Kamp's AR1A (φ = 0.8): ACF fades, one PACF bar}}{{img:k_ar2|Kamp's AR2: ACF fades, two PACF bars (≈ 0.84, 0.46)}}</div>
+<h3>AR(2) and AR(p)</h3>
+<p>y<sub>t</sub> = φ<sub>1</sub>y<sub>t−1</sub> + φ<sub>2</sub>y<sub>t−2</sub> + ε<sub>t</sub>, i.e. (1 − φ<sub>1</sub>L − φ<sub>2</sub>L²)y<sub>t</sub> = ε<sub>t</sub>. In general Φ(L)y<sub>t</sub> = ε<sub>t</sub>. Autocorrelations fade toward zero (if stationary); partials are nonzero for the first p lags, then zero.</p>`,
+    check: [
+      { q: 'AR(1) with φ = 0.6: ρ(2) = ?', options: ['0.36', '0.6', '1.2'], answer: 0, explain: 'φ² = 0.36.' },
+      { q: 'Is y(t) = 1.1y(t−1) + ε(t) stationary?', options: ['No: |φ| ≥ 1', 'Yes', 'Only if σ² is small'], answer: 0, explain: 'Stationary only if |φ| < 1; 1.1 explodes.' },
+      { q: 'PACF has 3 significant bars then nothing; ACF fades. Model?', options: ['AR(3)', 'MA(3)', 'White noise'], answer: 0, explain: 'AR cuts off in the PACF.' }
+    ] });
+
+  add({ id: 'l13', date: 'Must-know', title: 'Reading ACF/PACF graphs (Kamp\'s handwritten note)', skills: ['acf', 'wn', 'norm'],
+    take: 'Ask four questions in order: stationary? white noise? which one cuts off, ACF or PACF? after how many bars? MA cuts off in the ACF; AR cuts off in the PACF.',
+    body: `
+<p>Kamp's guidance for Exam 1: <i>be able to use ACF/PACF graphs to determine whether a series is stationary, whether it's white noise, and whether it's AR(p) or MA(q), with p and q. Also know the tests for normality and white noise.</i></p>
+<h3>Reading the RATS @bjident graph</h3>
+<p>Each lag has two bars: <b>dark = autocorrelations (CORRS)</b>, <b>light = partial autocorrelations (PARTIALS)</b>. Lag 0 is always 1 (a series is perfectly correlated with itself), so ignore it. The two lines are the significance bands (about ±2/√T near the start; RATS widens the ACF band at higher lags). A bar past a line = significant.</p>
+<h3>The four questions</h3>
+<table class="mini"><tr><th>What you see</th><th>Verdict</th></tr>
+<tr><td>ACF starts near 1 and dies off very slowly</td><td><b>Non-stationary: trend</b> (EMP, LEMP)</td></tr>
+<tr><td>ACF spikes again at lags 12, 24</td><td><b>Non-stationary: seasonal</b> (FARMEMP)</td></tr>
+<tr><td>Every bar inside the bands (both ACF and PACF)</td><td><b>White noise</b> (WN)</td></tr>
+<tr><td>ACF dies off gradually; PACF has p bars then cuts to zero</td><td><b>AR(p)</b>: count the PACF bars</td></tr>
+<tr><td>ACF has q bars then cuts to zero; PACF dies off, often flipping sign</td><td><b>MA(q)</b>: count the ACF bars</td></tr></table>
+<div class="figrow">{{fig:acf_wn}}{{fig:acf_ma1}}{{fig:acf_ar1}}</div>
+<h3>The two tests</h3>
+<table class="mini"><tr><th>Test</th><th>Checks</th><th>H₀</th><th>Reading</th></tr>
+<tr><td>Jarque-Bera</td><td>Normality, from skewness and kurtosis</td><td>Normal</td><td>p &lt; 0.05 → not normal</td></tr>
+<tr><td>Ljung-Box Q</td><td>White noise, from m ≈ √T autocorrelations</td><td>White noise</td><td>p &lt; 0.05 → not white noise</td></tr></table>
+<p>"Fail to reject" ≠ "proven". p &gt; 0.05 only means no evidence against the default.</p>`,
+    check: [
+      { q: 'ACF: two big bars then nothing. PACF: fades with alternating signs. Model?', options: ['MA(2)', 'AR(2)', 'Non-stationary'], answer: 0, explain: 'MA cuts off in the ACF.' },
+      { q: 'ACF: 0.97, 0.95, 0.94 … still 0.7 at lag 25. Verdict?', options: ['Non-stationary (trend)', 'AR(1) with small φ', 'White noise'], answer: 0, explain: 'Barely decaying from near 1 = drifting series.' },
+      { q: 'All bars inside the bands; Ljung-Box Signif 0.40. Verdict?', options: ['White noise', 'MA(1)', 'Not stationary'], answer: 0, explain: 'Nothing significant individually or jointly.' }
+    ] });
+
+  // ===== Kamp's real Old Exam 1 (numbers exactly as printed) =====
+
+
+  function oldExam() { return []; }
+
+  return { SKILLS, LESSONS: L, oldExam };
+})();
+
+/* ===== APP: state, sync, rendering, grading ===== */
+(() => {
+  const { esc, comma, rng, newSeed } = E;
+  const $ = (s, r = document) => r.querySelector(s);
+  const EXAM_AT = new Date('2026-10-22T18:00:00Z'); // Thu Oct 22, 2:00 pm Eastern
+  const LS_KEY = 'eco4422-trainer-v1', LS_MOCK = 'eco4422-mock-v1', LS_VIEW = 'eco4422-view';
+  const lsGet = k => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : null; } catch (e) { return null; } };
+  const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* storage unavailable */ } };
+  const lsDel = k => { try { localStorage.removeItem(k); } catch (e) { /* ignore */ } };
+
+  // ---------- progress ----------
+  const blank = () => ({ v: 1, updated: 0, attempts: [], lessons: {}, mocks: [], olds: [] });
+  const S = { view: 'home', prog: Object.assign(blank(), lsGet(LS_KEY) || {}), sync: 'local', db: null, ref: null, sample: null, drill: null, lesson: null, mock: null, old: null };
+  const QS = new Map();
+  const SID = Date.now().toString(36) + '-';
+
+  function merge(a, b) {
+    const out = blank(), key = x => x.t + '|' + x.g + '|' + x.s + '|' + (x.k || '');
+    const seen = new Map(); [...(a.attempts || []), ...(b.attempts || [])].forEach(x => seen.set(key(x), x));
+    out.attempts = [...seen.values()].sort((x, y) => x.t - y.t).slice(-1500);
+    out.lessons = Object.assign({}, a.lessons || {}); Object.entries(b.lessons || {}).forEach(([k, v]) => { if (!out.lessons[k] || (v.sc || 0) > (out.lessons[k].sc || 0)) out.lessons[k] = v; });
+    const mk = new Map(); [...(a.mocks || []), ...(b.mocks || [])].forEach(m => mk.set(m.t, m)); out.mocks = [...mk.values()].sort((x, y) => x.t - y.t).slice(-60);
+    const ok = new Map(); [...(a.olds || []), ...(b.olds || [])].forEach(m => ok.set(m.t, m)); out.olds = [...ok.values()].sort((x, y) => x.t - y.t).slice(-60);
+    out.updated = Math.max(a.updated || 0, b.updated || 0);
+    return out;
+  }
+  let saveTimer = null, writing = false, again = false;
+  function save() {
+    S.prog.updated = Date.now();
+    lsSet(LS_KEY, S.prog);
+    if (!S.ref) return;
+    clearTimeout(saveTimer); saveTimer = setTimeout(flush, 1200);
+  }
+  async function flush() {
+    if (!S.ref) return;
+    if (writing) { again = true; return; }
+    writing = true; setSync('saving');
+    try { await S.ref.set({ prog: JSON.parse(JSON.stringify(S.prog)) }); setSync('synced'); }
+    catch (e) { setSync('local'); }
+    writing = false; if (again) { again = false; flush(); }
+  }
+  function setSync(s) { S.sync = s; const el = $('#sync'); if (el) { el.dataset.state = s; el.textContent = { local: 'Saved on this device', saving: 'Saving…', synced: 'Synced to your account' }[s]; } }
+  function record(skill, gen, sc, mode, k) { S.prog.attempts.push({ t: Date.now(), s: skill, g: gen, sc: Math.round(sc * 100) / 100, m: mode, k: k ? SID + k : '' }); }
+
+  async function connect() {
+    if (!window.claude || typeof window.claude.use !== 'function') return;
+    try {
+      const [db, user] = await Promise.all([window.claude.use('db'), window.claude.use('user')]);
+      const uid = user ? await user.id() : null;
+      if (db && uid) {
+        S.ref = db.collection('data/users/' + uid).doc('progress');
+        const snap = await S.ref.get();
+        if (snap.exists && snap.data() && snap.data().prog) { S.prog = merge(S.prog, snap.data().prog); lsSet(LS_KEY, S.prog); render(); }
+        setSync('synced'); if (S.prog.attempts.length) flush();
+      }
+    } catch (e) { setSync('local'); }
+    try { S.sample = await window.claude.use('sample'); } catch (e) { S.sample = null; }
+    render();
+  }
+
+  // ---------- mastery ----------
+  function mastery() {
+    const M = {}; Object.keys(C.SKILLS).forEach(k => (M[k] = { n: 0, m: 0, last: [] }));
+    S.prog.attempts.forEach(a => { const x = M[a.s]; if (!x) return; const w = a.m === 'lesson' ? 0.15 : 0.3; x.m = x.n === 0 ? a.sc * (a.m === 'lesson' ? 0.6 : 1) : x.m * (1 - w) + a.sc * w; x.n++; x.last.push(a.sc); if (x.last.length > 10) x.last.shift(); });
+    Object.values(M).forEach(x => { x.acc = x.last.length ? x.last.reduce((s, v) => s + v, 0) / x.last.length : 0; x.level = x.n === 0 ? 'new' : x.m < 0.5 ? 'weak' : (x.m >= 0.8 && x.n >= 6) ? 'solid' : 'mid'; });
+    return M;
+  }
+  const LEVEL = { new: 'Not started', weak: 'Needs work', mid: 'Getting there', solid: 'Solid' };
+  function readiness(M) { let a = 0, b = 0; Object.entries(C.SKILLS).forEach(([k, s]) => { a += s.w * (M[k].n ? M[k].m : 0); b += s.w; }); return a / b; }
+  function nextUp(M) {
+    return Object.entries(C.SKILLS).map(([k, s]) => ({ k, s, pr: s.w * (1 - (M[k].n ? M[k].m : 0)) * (M[k].n < 3 ? 1.25 : 1) })).sort((a, b) => b.pr - a.pr).slice(0, 3).map(({ k, s }) => {
+      const L = C.LESSONS.find(l => l.id === s.lesson), done = S.prog.lessons[s.lesson];
+      return { k, s, L, act: done ? 'drill' : 'lesson', why: M[k].n === 0 ? 'Not tried yet' : `${Math.round(M[k].m * 100)}% mastery over ${M[k].n} answers` };
+    });
+  }
+
+  // ---------- helpers ----------
+  const pct = v => Math.round(v * 100) + '%';
+  function fmtAns(a) { if (!isFinite(a)) return String(a); if (Number.isInteger(a)) return comma(a, 0); const ab = Math.abs(a); return ab >= 100 ? comma(a, 2) : ab >= 1 ? (+a.toFixed(4)).toString() : (+a.toFixed(4)).toString(); }
+  function parseNum(s) { if (s == null) return NaN; s = String(s).trim().replace(/[−–—]/g, '-').replace(/[,\s$%]/g, ''); if (!/^[-+]?(\d+\.?\d*|\.\d+)(e[-+]?\d+)?$/i.test(s)) return NaN; return parseFloat(s); }
+  function md(t) { return esc(t).replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/`([^`]+)`/g, '<code>$1</code>').split(/\n{2,}/).map(p => '<p>' + p.replace(/\n/g, '<br>') + '</p>').join(''); }
+  const plain = h => String(h).replace(/<sub>(.*?)<\/sub>/g, '_$1').replace(/<sup>(.*?)<\/sup>/g, '^$1').replace(/<br\s*\/?>/g, '\n').replace(/<[^>]+>/g, '').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&').replace(/&quot;/g, '"');
+  function countdown() { const ms = EXAM_AT - Date.now(); if (ms <= 0) return 'Exam day'; const d = Math.floor(ms / 864e5), h = Math.floor(ms % 864e5 / 36e5), m = Math.floor(ms % 36e5 / 6e4); return d ? `${d}d ${h}h to go` : `${h}h ${m}m to go`; }
+
+  // ---------- lesson figures ----------
+  const FIG = {
+    residual() {
+      const r = rng(7), W = 640, H = 300, ml = 46, mb = 34, mt = 16, mr = 16, pts = Array.from({ length: 14 }, (_, i) => { const x = 60 + i * 2.2 + r.range(-1, 1); return { x, y: 200 + 15 * x + r.n() * 60 }; });
+      const xs = pts.map(p => p.x), ys = pts.map(p => p.y), x0 = Math.min(...xs) - 2, x1 = Math.max(...xs) + 2, y0 = Math.min(...ys) - 60, y1 = Math.max(...ys) + 60;
+      const o = E.ols(ys, [ys.map(() => 1), xs], ['c', 'x']), X = x => ml + (x - x0) / (x1 - x0) * (W - ml - mr), Y = y => mt + (y1 - y) / (y1 - y0) * (H - mt - mb), f = x => o.b[0] + o.b[1] * x;
+      let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Scatter of points with a fitted line; one residual marked"><rect class="frame" x="${ml}" y="${mt}" width="${W - ml - mr}" height="${H - mt - mb}"/>`;
+      s += `<line class="l2s" x1="${X(x0)}" y1="${Y(f(x0))}" x2="${X(x1)}" y2="${Y(f(x1))}"/>`;
+      const k = pts.reduce((bi, p, i) => (Math.abs(p.y - f(p.x)) > Math.abs(pts[bi].y - f(pts[bi].x)) ? i : bi), 0);
+      pts.forEach((p, i) => { s += `<circle class="${i === k ? 'dotk' : 'dot'}" cx="${X(p.x)}" cy="${Y(p.y)}" r="${i === k ? 6 : 4.5}"/>`; });
+      const p = pts[k]; s += `<line class="resid" x1="${X(p.x)}" x2="${X(p.x)}" y1="${Y(p.y)}" y2="${Y(f(p.x))}"/><text class="anno" x="${X(p.x) + 10}" y="${(Y(p.y) + Y(f(p.x))) / 2}">residual e = actual − fitted</text>`;
+      s += `<text class="anno" x="${X(x1) - 8}" y="${Y(f(x1)) + 18}" text-anchor="end">fitted line ŷ</text><text class="tick" x="${W / 2}" y="${H - 8}" text-anchor="middle">x (temperature)</text><text class="tick" x="14" y="${H / 2}" transform="rotate(-90 14 ${H / 2})" text-anchor="middle">y (sales)</text>`;
+      return s + '</svg>';
+    },
+    spread() {
+      const r = rng(11), T = 160, y = Array.from({ length: T }, (_, t) => 10 + 0.0008 * t * t + r.n() * 3), m = E.mean(y), t = y.map((_, i) => i + 1);
+      const o = E.ols(y, [y.map(() => 1), t, t.map(v => v * v)], ['c', 't', 't2']);
+      return `<div class="figrow2">${E.lineChart([{ y, cls: 'l1' }, { y: y.map(() => m), cls: 'l2' }], 2000, 'Std Error of Dep. Var: swing around the AVERAGE', { h: 220 })}${E.lineChart([{ y, cls: 'l1' }, { y: o.fit, cls: 'l2' }], 2000, 'Std Error of Estimate: miss around the FITTED LINE', { h: 220 })}</div>`;
+    },
+    jb() {
+      const r = rng(5), a = Array.from({ length: 300 }, () => r.n()), b = Array.from({ length: 300 }, () => Math.exp(r.n() * 0.8));
+      const hist = (d, title, jbv) => {
+        const W = 320, H = 210, lo = Math.min(...d), hi = Math.max(...d), nb = 18, c = new Array(nb).fill(0); d.forEach(v => c[Math.min(nb - 1, Math.floor((v - lo) / (hi - lo) * nb))]++);
+        const mx = Math.max(...c); let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${title} histogram"><text class="ttl" x="${W / 2}" y="16" text-anchor="middle">${title}</text>`;
+        c.forEach((v, i) => { const h = v / mx * 120; s += `<rect class="acfb" x="${16 + i * (W - 32) / nb}" y="${150 - h}" width="${(W - 32) / nb - 2}" height="${h}"/>`; });
+        const tw = W - 32, frac = Math.min(1, Math.log10(1 + jbv) / Math.log10(1 + 500)), cut = Math.log10(1 + 5.99) / Math.log10(1 + 500);
+        s += `<rect class="thermo" x="16" y="170" width="${tw}" height="12" rx="6"/><rect class="${jbv > 5.99 ? 'thermo-hot' : 'thermo-ok'}" x="16" y="170" width="${Math.max(6, tw * frac)}" height="12" rx="6"/><line class="cut" x1="${16 + tw * cut}" x2="${16 + tw * cut}" y1="164" y2="188"/><text class="tick" x="${16 + tw * cut}" y="202" text-anchor="middle">5.99</text><text class="anno" x="${W - 16}" y="202" text-anchor="end">JB = ${E.fx(jbv, 2)}</text>`;
+        return s + '</svg>';
+      };
+      const ma = E.moments(a), mb = E.moments(b);
+      return `<div class="figrow2">${hist(a, 'Bell-shaped (like DOLLAR)', E.jb(300, ma.skew, ma.exkurt))}${hist(b, 'Long right tail (like LIRA)', E.jb(300, mb.skew, mb.exkurt))}</div><p class="cap">The bar under each histogram is the JB "thermometer" (log scale). Past the 5.99 line = reject normality.</p>`;
+    },
+    aicsic() {
+      const W = 640, H = 240, data = [['AIC', 5.20, 5.09], ['SIC', 5.48, 5.65]], lo = 4.9, hi = 5.75, Y = v => 200 - (v - lo) / (hi - lo) * 170;
+      let s = `<svg class="chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="AIC and SIC scores for model A and model B"><line class="zero" x1="40" x2="${W - 20}" y1="200" y2="200"/>`;
+      data.forEach(([nm, a, b], g) => {
+        const x0 = 80 + g * 290;
+        [[a, 'A (K=2)', 'acfb'], [b, 'B (K=4)', 'barB']].forEach(([v, lab, cls], i) => { const x = x0 + i * 100; s += `<rect class="${cls}" x="${x}" y="${Y(v)}" width="70" height="${200 - Y(v)}"/><text class="anno" x="${x + 35}" y="${Y(v) - 6}" text-anchor="middle">${v.toFixed(2)}</text><text class="tick" x="${x + 35}" y="216" text-anchor="middle">${lab}</text>`; });
+        const win = (nm === 'AIC') ? 'B wins (lower)' : 'A wins (lower)'; s += `<text class="ttl" x="${x0 + 85}" y="234" text-anchor="middle">${nm}: ${win}</text>`;
+      });
+      return s + '</svg>';
+    },
+    dw() {
+      const r = rng(3), a = E.arma(r, 120), b = E.arma(r, 120, [0.88]);
+      return `<div class="figrow2">${E.lineChart([{ y: a, cls: 'l3' }], 2010, 'DW ≈ 2: misses look random', { h: 200, zero: true })}${E.lineChart([{ y: b, cls: 'l3' }], 2010, 'DW near 0: misses come in runs', { h: 200, zero: true })}</div>`;
+    },
+    trends() {
+      const T = 360, t = Array.from({ length: T }, (_, i) => i + 1);
+      return E.lineChart([{ y: t.map(x => 10000 - 1.35 * x), cls: 'l1' }, { y: t.map(x => 9994 - 0.003751 * x * x), cls: 'l2' }, { y: t.map(x => 10000 + 6 * x - 0.025 * x * x), cls: 'l4' }], 1987, 'Three trend shapes (TIME = 1 … 360)', { h: 240, legend: [{ name: 'Linear', cls: 'l1' }, { name: 'Quadratic', cls: 'l2' }, { name: '2nd degree', cls: 'l4' }] });
+    },
+    season() {
+      const S2 = G.seasonSim(rng(21), 'strong', false, 'AA-like');
+      return S2 ? E.actFit(S2.y, S2.o.fit, S2.o.e, S2.y0, 'A seasonal series and its month-average fit') : '';
+    },
+    loglin() {
+      const T = 240, y = Array.from({ length: T }, (_, t) => 100 * Math.exp(0.012 * t));
+      return `<div class="figrow2">${E.lineChart([{ y, cls: 'l1' }], 2000, 'Level: steady 1.2% growth curves up', { h: 200 })}${E.lineChart([{ y: y.map(Math.log), cls: 'l1' }], 2000, 'Log: the same series is a straight line', { h: 200 })}</div>`;
+    },
+    stationary() {
+      const r = rng(9), T = 240, a = E.arma(r, T, [0.6]).map((v, t) => v + 0.05 * t), b = E.arma(r, T, [0.88]), c = E.arma(r, T);
+      return `<div class="figrow3">${E.lineChart([{ y: a, cls: 'l1' }], 2000, 'Non-stationary: trend', { h: 190 })}${E.lineChart([{ y: b, cls: 'l1' }], 2000, 'Stationary with a cycle', { h: 190, zero: true })}${E.lineChart([{ y: c, cls: 'l1' }], 2000, 'White noise', { h: 190, zero: true })}</div>`;
+    },
+    lag() {
+      const cell = (lbl, sub, cls) => `<div class="lagcell ${cls || ''}"><b>${lbl}</b><span>${sub}</span></div>`;
+      return `<div class="lagline">${cell('y<sub>t−3</sub>', 'L<sup>3</sup>y<sub>t</sub>')}${cell('y<sub>t−2</sub>', 'L<sup>2</sup>y<sub>t</sub>')}${cell('y<sub>t−1</sub>', 'L·y<sub>t</sub>')}${cell('y<sub>t</sub>', 'today', 'now')}</div><p class="cap">Each press of L moves one step left (one period back).</p>`;
+    },
+    acf_wn() { const S2 = G.simIdent(rng(31), 'wn', 312); return E.bjident(S2.r, S2.pp, 312, 'White noise'); },
+    acf_ma1() { const S2 = G.simIdent(rng(32), 'ma1', 312); return E.bjident(S2.r, S2.pp, 312, 'MA(1): ACF cuts off'); },
+    acf_ar1() { const S2 = G.simIdent(rng(33), 'ar1', 312); return E.bjident(S2.r, S2.pp, 312, 'AR(1): PACF cuts off'); }
+  };
+  const figCache = {};
+  function fillFigs(h) {
+    return h.replace(/\{\{fig:(\w+)\}\}/g, (_, k) => `<div class="fig">${figCache[k] || (figCache[k] = FIG[k] ? FIG[k]() : '')}</div>`)
+      .replace(/\{\{img:(\w+)\|([^}]+)\}\}/g, (_, k, cap) => IMG[k] ? `<figure class="scan"><img src="${IMG[k].src}" width="${IMG[k].w}" height="${IMG[k].h}" alt="${esc(cap)}" loading="lazy"><figcaption>${esc(cap)}</figcaption></figure>` : '');
+  }
+
+  // ---------- question component ----------
+  let qSeq = 0;
+  function makeQ(q, mode) { const id = 'q' + (++qSeq); QS.set(id, { q, mode, ans: {}, res: {}, graded: false }); return id; }
+  function exhibitsHTML(q) { return q.exhibits.map(x => (x.kind === 'pre' ? `<pre class="rats" tabindex="0">${esc(x.text)}</pre>` : `<div class="exh">${x.html}</div>`)).join(''); }
+  function partHTML(id, pi) {
+    const st = QS.get(id), p = st.q.parts[pi], a = st.ans[pi], r = st.res[pi], locked = st.graded;
+    let body = '';
+    if (p.kind === 'mc') body = `<div class="opts" role="radiogroup">${p.options.map((o, i) => { let c = 'opt'; if (a === i) c += ' sel'; if (locked) { if (i === p.answer) c += ' right'; else if (a === i) c += ' wrong'; } return `<button class="${c}" role="radio" aria-checked="${a === i}" data-act="mc" data-q="${id}" data-p="${pi}" data-i="${i}" ${locked ? 'disabled' : ''}><span class="dotsel"></span><span>${o}</span></button>`; }).join('')}</div>`;
+    else if (p.kind === 'num') body = `<div class="numrow"><input class="num ${locked ? (r && r.sc === 1 ? 'right' : 'wrong') : ''}" inputmode="decimal" autocomplete="off" data-num data-q="${id}" data-p="${pi}" value="${esc(a == null ? '' : a)}" ${locked ? 'disabled' : ''} placeholder="Your answer" aria-label="Numeric answer">${p.unit ? `<span class="unit">${p.unit}</span>` : ''}</div>`;
+    else body = `<textarea class="txt" rows="5" data-text data-q="${id}" data-p="${pi}" ${locked ? 'disabled' : ''} placeholder="Write your answer the way you would on the exam…" aria-label="Written answer">${esc(a || '')}</textarea>`;
+    let fb = '';
+    if (locked && r) {
+      if (p.kind === 'mc') fb = `<div class="fb ${r.sc === 1 ? 'ok' : 'no'}"><b>${r.sc === 1 ? 'Correct.' : 'Not quite.'}</b> ${p.explain || ''}</div>`;
+      else if (p.kind === 'num') fb = `<div class="fb ${r.sc === 1 ? 'ok' : 'no'}"><b>${r.sc === 1 ? 'Correct.' : (isNaN(parseNum(a)) ? 'No number entered.' : 'Not quite.')}</b> Answer: <b>${fmtAns(p.answer)}</b>${p.unit ? ' ' + p.unit : ''}. ${p.explain || ''}</div>`;
+      else fb = textFeedback(id, pi);
+    }
+    return `<div class="part" id="p-${id}-${pi}"><div class="pq">${p.label ? `<span class="plabel">${esc(p.label)}</span>` : ''}<div>${p.q}</div></div>${body}${fb}</div>`;
+  }
+  function textFeedback(id, pi) {
+    const st = QS.get(id), p = st.q.parts[pi], r = st.res[pi] || {};
+    let h = '';
+    if (r.status === 'grading') h += `<div class="fb wait"><span class="spin"></span> Claude is grading your answer…</div>`;
+    else if (r.status === 'claude') h += `<div class="fb ${r.sc >= 0.7 ? 'ok' : r.sc >= 0.4 ? 'mid' : 'no'}"><b>Claude's grade: ${pct(r.sc)}</b>${md(r.feedback || '')}</div>`;
+    else if (r.status === 'err') h += `<div class="fb mid">Claude couldn't grade this right now${r.why ? ' (' + esc(r.why) + ')' : ''}. Tick the key points you covered instead.</div>`;
+    const covered = r.covered || [];
+    h += `<div class="keypts"><div class="kh">Key points ${r.status === 'claude' ? '(✓ = Claude says you covered it)' : '(tick the ones you covered)'}</div>${p.points.map((pt, k) => `<label class="kp"><input type="checkbox" data-self data-q="${id}" data-p="${pi}" data-k="${k}" ${covered.includes(k) ? 'checked' : ''} ${r.status === 'claude' ? 'disabled' : ''}><span>${esc(pt)}</span></label>`).join('')}</div>`;
+    h += `<details class="model" ${r.status !== 'grading' ? 'open' : ''}><summary>Model answer</summary><p>${esc(p.model)}</p></details>`;
+    return h;
+  }
+  function qHTML(id, opts = {}) {
+    const st = QS.get(id), q = st.q;
+    return `<article class="qcard" id="${id}">
+      <header class="qhead"><div><div class="qref">${q.num ? `Question ${q.num} · ` : ''}${esc(q.examRef || '')}</div><h3>${esc(q.title)}</h3></div></header>
+      ${q.stem ? `<p class="stem">${q.stem}</p>` : ''}${exhibitsHTML(q)}
+      <div class="parts">${q.parts.map((_, pi) => partHTML(id, pi)).join('')}</div>
+      ${opts.footer || ''}
+      <div class="askwrap" id="ask-${id}"></div>
+    </article>`;
+  }
+  function rerenderPart(id, pi) { const el = document.getElementById(`p-${id}-${pi}`); if (el) el.outerHTML = partHTML(id, pi); }
+  function gradeQ(id, mode) {
+    const st = QS.get(id); st.graded = true;
+    const textIdx = [];
+    st.q.parts.forEach((p, pi) => {
+      if (p.kind === 'mc') st.res[pi] = { sc: st.ans[pi] === p.answer ? 1 : 0 };
+      else if (p.kind === 'num') { const v = parseNum(st.ans[pi]); const allow = Math.max(p.tol.abs || 0, (p.tol.rel || 0) * Math.abs(p.answer)) + 1e-9; st.res[pi] = { sc: isFinite(v) && Math.abs(v - p.answer) <= allow ? 1 : 0 }; }
+      else { st.res[pi] = { sc: 0, status: 'self', covered: [] }; textIdx.push(pi); }
+      if (p.kind !== 'text') record(p.skill, st.q.gen, st.res[pi].sc, mode, id + pi);
+    });
+    return textIdx;
+  }
+  async function claudeGrade(items) { // items: [{id, pi}]
+    if (!S.sample || !items.length) return false;
+    items.forEach(({ id, pi }) => { QS.get(id).res[pi] = { sc: 0, status: 'grading', covered: [] }; rerenderPart(id, pi); });
+    const payload = items.map(({ id, pi }) => { const p = QS.get(id).q.parts[pi]; return { question: plain(p.q), model_answer: p.model, key_points: p.points, student_answer: QS.get(id).ans[pi] || '' }; });
+    const prompt = `You are grading short written answers on an undergraduate time-series econometrics exam (ECO 4422: regression, RATS output, trends, seasonality, stationarity, ARMA). For each item compare the student's answer with the model answer and the numbered key points (index from 0). A key point counts as covered if the student states the idea correctly in any wording. Penalize wrong statements (for example "higher AIC is better"). A blank answer scores 0.
+Return JSON only, no prose: {"results":[{"score": number from 0 to 1, "covered": [indices of key points covered], "feedback": "2-3 short plain-English sentences to the student (use 'you'): what was right, what is missing or wrong, and one concrete fix"}]} with one result per item, in order.
+Items:
+${JSON.stringify(payload, null, 1)}`;
+    try {
+      const out = await S.sample.json(prompt, { modelTier: 'default' });
+      const res = (out && out.results) || [];
+      items.forEach(({ id, pi }, i) => { const r = res[i] || {}; const st = QS.get(id); st.res[pi] = { sc: Math.max(0, Math.min(1, +r.score || 0)), covered: Array.isArray(r.covered) ? r.covered.map(Number) : [], feedback: String(r.feedback || ''), status: 'claude' }; record(st.q.parts[pi].skill, st.q.gen, st.res[pi].sc, st.mode, id + pi); rerenderPart(id, pi); });
+      save(); return true;
+    } catch (e) {
+      const why = e && e.code === 'not_granted' ? 'not allowed in this view' : e && e.code === 'rate_limited' ? 'too many requests, try again in a minute' : '';
+      if (e && e.code === 'not_granted') S.sample = null;
+      items.forEach(({ id, pi }) => { QS.get(id).res[pi] = { sc: 0, status: 'err', covered: [], why }; rerenderPart(id, pi); });
+      return false;
+    }
+  }
+  function selfGrade(id, pi) {
+    const st = QS.get(id), p = st.q.parts[pi], boxes = [...document.querySelectorAll(`[data-self][data-q="${id}"][data-p="${pi}"]`)];
+    const cov = boxes.filter(b => b.checked).map(b => +b.dataset.k), r = st.res[pi];
+    r.covered = cov; r.sc = cov.length / p.points.length;
+    // keep only the latest self-grade for this part
+    S.prog.attempts = S.prog.attempts.filter(a => a.k !== SID + id + pi);
+    record(p.skill, st.q.gen, r.sc, st.mode + '-self', id + pi); save();
+  }
+  function qScore(id) { const st = QS.get(id); let a = 0, b = 0; st.q.parts.forEach((p, pi) => { b += p.pts || 1; a += (p.pts || 1) * ((st.res[pi] && st.res[pi].sc) || 0); }); return b ? a / b : 0; }
+
+  // ask Claude to explain
+  function askBox(id) { const st = QS.get(id); return `<div class="ask"><div class="askrow"><input class="askin" id="askq-${id}" placeholder="What's confusing? (optional)" aria-label="What's confusing"><button class="btn ghost" data-act="ask" data-q="${id}">Explain it to me</button></div><div class="askout" id="askout-${id}" aria-live="polite"></div></div>`; }
+  async function ask(id) {
+    const st = QS.get(id), out = document.getElementById('askout-' + id), q = st.q;
+    if (!S.sample) { out.innerHTML = '<p class="muted">Claude explanations aren\'t available in this view. The explanation under each part has the full walkthrough.</p>'; return; }
+    const extra = (document.getElementById('askq-' + id) || {}).value || '';
+    const parts = q.parts.map((p, pi) => `Part ${p.label}: ${plain(p.q)}\nCorrect answer: ${p.kind === 'mc' ? plain(p.options[p.answer]) : p.kind === 'num' ? fmtAns(p.answer) : p.model}\nStudent answered: ${p.kind === 'mc' ? (st.ans[pi] != null ? plain(p.options[st.ans[pi]]) : '(blank)') : (st.ans[pi] || '(blank)')}\nKey: ${plain(p.explain || (p.points || []).join('; '))}`).join('\n\n');
+    const exh = q.exhibits.filter(x => x.kind === 'pre').map(x => x.text).join('\n\n').slice(0, 3500);
+    const prompt = `You are a patient tutor for ECO 4422 (Time Series & Forecasting with RATS, Prof. Kamp). Explain this exam question to a smart college freshman with no econ background. Rules: define every term in plain words before using it; start with the idea in plain English, then show the formula or the printout line with the actual numbers from this question, then say exactly what to write on the exam. Focus on the parts the student got wrong${extra ? ' and on their question' : ''}. Under 250 words, short paragraphs, no headings, no tables. Use **bold** for the key takeaway.
+
+Question: ${plain(q.stem)}
+${exh ? 'RATS output:\n' + exh + '\n' : ''}
+${parts}
+${extra ? '\nStudent\'s question: ' + extra : ''}`;
+    out.innerHTML = '<p class="muted"><span class="spin"></span> Thinking…</p>';
+    try { const r = await S.sample(prompt, { onText: ({ text }) => { out.innerHTML = md(text); }, modelTier: 'default' }); out.innerHTML = md(r.text); }
+    catch (e) { out.innerHTML = `<p class="muted">${e && e.code === 'rate_limited' ? 'Too many requests. Try again in a minute.' : e && e.code === 'not_granted' ? 'Claude isn\'t allowed in this view.' : 'Couldn\'t reach Claude just now.'}</p>`; if (e && e.code === 'not_granted') S.sample = null; }
+  }
+
+  // ---------- views ----------
+  const NAV = [['home', 'Progress'], ['lessons', 'Lessons'], ['drills', 'Drills'], ['mock', 'Mock exam']];
+  function shell() {
+    return `<header class="top"><div class="brand"><div class="mark" aria-hidden="true">Σ</div><div><div class="bt">ECO 4422 Exam 1 Trainer</div><div class="bs">Thu Oct 22 · 2:00 pm · SOC 145 · <span id="cd">${countdown()}</span></div></div></div><div id="sync" class="sync" data-state="${S.sync}">${{ local: 'Saved on this device', saving: 'Saving…', synced: 'Synced to your account' }[S.sync]}</div></header>
+      <nav class="tabs" role="tablist">${NAV.map(([k, l]) => `<button role="tab" aria-selected="${S.view === k}" class="tab ${S.view === k ? 'on' : ''}" data-act="nav" data-v="${k}">${l}</button>`).join('')}</nav><main id="main"></main>`;
+  }
+  function render() {
+    if (!$('#app').firstChild) $('#app').innerHTML = shell();
+    else { document.querySelectorAll('.tab').forEach(t => { const on = t.dataset.v === S.view; t.classList.toggle('on', on); t.setAttribute('aria-selected', on); }); }
+    const m = $('#main');
+    if (S.view === 'home') m.innerHTML = homeView();
+    else if (S.view === 'lessons') m.innerHTML = S.lesson ? lessonView(S.lesson) : lessonsView();
+    else if (S.view === 'drills') m.innerHTML = S.drill ? drillView() : drillsView();
+    else if (S.view === 'mock') m.innerHTML = mockView();
+    else if (S.view === 'old') m.innerHTML = oldView();
+  }
+  function go(v, extra) { S.view = v; Object.assign(S, extra || {}); lsSet(LS_VIEW, v); render(); window.scrollTo({ top: 0 }); }
+
+  function ring(v, label) { const r = 54, c = 2 * Math.PI * r; return `<svg class="ring" viewBox="0 0 140 140" role="img" aria-label="${label} ${pct(v)}"><circle class="rbg" cx="70" cy="70" r="${r}"/><circle class="rfg" cx="70" cy="70" r="${r}" stroke-dasharray="${c * v} ${c}" transform="rotate(-90 70 70)"/><text x="70" y="70" text-anchor="middle" class="rv">${pct(v)}</text><text x="70" y="92" text-anchor="middle" class="rl">${label}</text></svg>`; }
+  function homeView() {
+    const M = mastery(), R = readiness(M), nu = nextUp(M), P = S.prog;
+    const lessonsDone = Object.keys(P.lessons).length, answered = P.attempts.filter(a => a.m !== 'lesson').length;
+    const best = P.mocks.length ? Math.max(...P.mocks.map(m => m.sc)) : null;
+    const today = P.attempts.filter(a => a.m !== 'lesson' && new Date(a.t).toDateString() === new Date().toDateString()).length;
+    const skillRows = Object.entries(C.SKILLS).sort((a, b) => b[1].w - a[1].w).map(([k, s]) => { const x = M[k]; return `<div class="skrow"><div class="skn"><div>${esc(s.name)}</div><div class="sks lv-${x.level}">${LEVEL[x.level]}${x.n ? ` · ${x.n} answered` : ''}</div></div><div class="bar"><span class="lv-${x.level}" style="width:${x.n ? Math.max(3, x.m * 100) : 0}%"></span></div><div class="skp">${x.n ? pct(x.m) : '–'}</div><button class="btn sm ghost" data-act="drill" data-d="${s.drill}">Drill</button></div>`; }).join('');
+    const mocks = P.mocks.slice(-8).reverse().map(m => `<li><span>${new Date(m.t).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })} ${new Date(m.t).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })}</span><b>${pct(m.sc)}</b><span class="muted">${m.min} min</span></li>`).join('');
+    return `<section class="hero">
+      ${ring(R, 'ready')}
+      <div class="herotext"><h1>${R < 0.35 ? 'Let\'s build the base.' : R < 0.7 ? 'Good momentum. Close the gaps.' : 'Exam-ready territory. Keep it warm.'}</h1>
+      <p class="muted">Readiness = your mastery across the 13 skills Exam 1 tests, weighted toward the old exam's question types. It only rises when you answer correctly.</p>
+      <div class="stats"><div><b>${answered}</b><span>answers</span></div><div><b>${today}</b><span>today</span></div><div><b>${lessonsDone}/13</b><span>lessons</span></div><div><b>${P.mocks.length}</b><span>mocks${best != null ? ` · best ${pct(best)}` : ''}</span></div></div></div>
+    </section>
+    <section><h2>Work on next</h2><div class="nextgrid">${nu.map(n => `<div class="nextcard"><div class="nk">${esc(n.s.name)}</div><div class="muted small">${esc(n.why)}</div>${n.act === 'lesson' ? `<button class="btn" data-act="lesson" data-l="${n.L.id}">Lesson: ${esc(n.L.title)}</button>` : `<button class="btn" data-act="drill" data-d="${n.s.drill}">Drill it</button>`}</div>`).join('')}</div></section>
+    <section><h2>Mastery by skill</h2><div class="sklist">${skillRows}</div></section>
+    <section class="two"><div><h2>Mock exams</h2>${mocks ? `<ul class="mocklist">${mocks}</ul>` : '<p class="muted">No mock yet. Take one once a few drills feel comfortable; it mirrors the old exam\'s seven questions in 75 minutes.</p>'}<button class="btn" data-act="nav" data-v="mock">Go to mock exam</button></div>
+    <div><h2>Exam-day facts</h2><ul class="facts"><li>Thu Oct 22, 2:00 pm, SOC 145. 25% of the grade.</li><li>Covers Aug 25 – Oct 15 (ends after AR(p)).</li><li>Mostly reading RATS output and graphs, a few plug-in calculations, two explain questions.</li><li>Ask Kamp before Thursday: open notes? Calculator allowed?</li></ul></div></section>`;
+  }
+
+  function lessonsView() {
+    const P = S.prog;
+    return `<section><h1>Lessons</h1><p class="muted">In lecture order. Each one: the idea in plain English, the formula with real numbers, Kamp's example, and how it shows up on the exam. Finish the quick check to mark it done.</p>
+    <ol class="lessonlist">${C.LESSONS.map((l, i) => { const d = P.lessons[l.id]; return `<li><button class="lessonbtn" data-act="lesson" data-l="${l.id}"><span class="ld">${esc(l.date)}</span><span class="lt">${i + 1}. ${esc(l.title)}</span><span class="lk ${d ? 'done' : ''}">${d ? '✓ ' + pct(d.sc) : 'Start'}</span></button></li>`; }).join('')}</ol></section>`;
+  }
+  function lessonView(lid) {
+    const i = C.LESSONS.findIndex(l => l.id === lid), l = C.LESSONS[i];
+    if (!S.lessonQ || S.lessonQ.lid !== lid) {
+      const q = { gen: 'lesson', title: 'Quick check', examRef: l.date + ' lesson', stem: '', exhibits: [], parts: l.check.map((c, k) => G.mcFixed({ label: String(k + 1), skill: l.skills[0], q: c.q, options: c.options, answer: c.answer, explain: c.explain })) };
+      // shuffle options with a fixed seed so the answer isn't always first
+      const r = rng(lid.charCodeAt(2) * 31 + lid.charCodeAt(1));
+      q.parts.forEach(p => { const order = r.shuffle(p.options.map((_, j) => j)); p.options = order.map(j => p.options[j]); p.answer = order.indexOf(p.answer); });
+      S.lessonQ = { lid, id: makeQ(q, 'lesson') };
+    }
+    const nxt = C.LESSONS[i + 1], st = QS.get(S.lessonQ.id);
+    return `<div class="crumbs"><button class="link" data-act="lessons">← All lessons</button><span class="muted">Lesson ${i + 1} of ${C.LESSONS.length} · ${esc(l.date)}</span></div>
+    <article class="lesson"><h1>${esc(l.title)}</h1><div class="take"><span>The one-line idea</span>${esc(l.take)}</div>${fillFigs(l.body)}</article>
+    ${qHTML(S.lessonQ.id, { footer: `<div class="qfoot">${st.graded ? `<b>${pct(qScore(S.lessonQ.id))}</b> on the quick check. ` + (nxt ? `<button class="btn" data-act="lesson" data-l="${nxt.id}">Next: ${esc(nxt.title)}</button>` : '<button class="btn" data-act="nav" data-v="drills">Go to drills</button>') + ` <button class="btn ghost" data-act="drill" data-d="${C.SKILLS[l.skills[0]].drill}">Drill this</button>` : `<button class="btn" data-act="check" data-q="${S.lessonQ.id}">Check answers</button>`}</div>` })}`;
+  }
+
+  function drillsView() {
+    const M = mastery();
+    return `<section><h1>Drills</h1><p class="muted">Each drill builds a fresh question in the old exam's format, with new numbers and new RATS output every time. Wrong answers come with the full reasoning; tap "Explain it to me" for Claude's walkthrough.</p>
+    <div class="drillgrid">${G.DRILLS.map(d => { const ms = d.skills.map(k => M[k]), tried = ms.filter(x => x.n), m = tried.length ? tried.reduce((s, x) => s + x.m, 0) / tried.length : 0; const lv = !tried.length ? 'new' : m < 0.5 ? 'weak' : m >= 0.8 ? 'solid' : 'mid'; return `<button class="drillcard" data-act="drill" data-d="${d.id}"><span class="dsub">${esc(d.sub)}</span><span class="dname">${esc(d.name)}</span><span class="bar"><span class="lv-${lv}" style="width:${tried.length ? Math.max(3, m * 100) : 0}%"></span></span><span class="dlv lv-${lv}">${tried.length ? pct(m) + ' · ' + LEVEL[lv] : 'Not started'}</span></button>`; }).join('')}</div></section>`;
+  }
+  function newDrillQ() { const d = G.DRILLS.find(x => x.id === S.drill.id); const q = d.fn(rng(newSeed())); S.drill.qid = makeQ(q, 'drill'); }
+  function drillView() {
+    const d = G.DRILLS.find(x => x.id === S.drill.id); if (!S.drill.qid) newDrillQ();
+    const id = S.drill.qid, st = QS.get(id);
+    const foot = st.graded ? `<div class="qfoot"><b>${pct(qScore(id))}</b> on this one${S.drill.n ? ` · session: ${pct(S.drill.sum / S.drill.n)} over ${S.drill.n}` : ''}. <button class="btn" data-act="next">Next question</button></div>${askBox(id)}` : `<div class="qfoot"><button class="btn" data-act="check" data-q="${id}">Check answers</button> <button class="btn ghost" data-act="next">Skip</button></div>`;
+    return `<div class="crumbs"><button class="link" data-act="drills">← All drills</button><span class="muted">${esc(d.name)} · ${esc(d.sub)}</span></div>${qHTML(id, { footer: foot })}`;
+  }
+
+  // ----- mock exam -----
+  const MOCK_MIN = 75;
+  function mockView() {
+    let mk = S.mock || lsGet(LS_MOCK);
+    if (mk && !S.mock) { S.mock = mk; buildMock(); }
+    if (!S.mock) return `<section class="mockintro"><h1>Mock exam</h1><p>Same structure as Kamp's old Exam 1, with fresh numbers every time:</p>
+      <ol class="mocklist2"><li><b>Q1</b> Pick the best trend model and forecast two months</li><li><b>Q2</b> Seasonality in two series, explain, forecast a month</li><li><b>Q3</b> Read an ACF/PACF graph and a Ljung-Box test (Kamp's handwritten note; the old exam skips Q3)</li><li><b>Q4</b> Demand regression: significance, substitutes, elasticities, serial correlation</li><li><b>Q5</b> Lag operator: pack and unpack</li><li><b>Q6</b> Explain question (regression and model selection)</li><li><b>Q7</b> Explain question (stationarity and time-series ideas)</li></ol>
+      <p class="muted">75-minute timer. Answers save as you go, so a refresh won't lose your work. Written answers are graded by Claude when you submit${S.sample ? '' : ' (or by you, against the key points, if Claude isn\'t available here)'}. Kamp's real point values aren't known, so each part counts equally and written parts count double.</p>
+      <button class="btn big" data-act="mockstart">Start a 75-minute mock</button></section>`;
+    const ids = S.mock.ids, done = S.mock.done;
+    const left = Math.max(0, S.mock.start + MOCK_MIN * 60000 - Date.now());
+    const bar = done ? '' : `<div class="mockbar"><span id="timer" class="${left < 600000 ? 'low' : ''}">${fmtLeft(left)}</span><span class="muted small">${answeredCount()} parts answered</span><button class="btn" data-act="mocksubmit">Submit exam</button></div>`;
+    const res = done ? mockResults() : '';
+    return `${bar}${res}${ids.map(id => qHTML(id, { footer: done ? askBox(id) : '' })).join('')}${done ? '<div class="qfoot"><button class="btn big" data-act="mocknew">Take another mock</button></div>' : '<div class="qfoot"><button class="btn big" data-act="mocksubmit">Submit exam</button></div>'}`;
+  }
+  const fmtLeft = ms => { const s = Math.floor(ms / 1000); return ms <= 0 ? 'Time\'s up' : `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')} left`; };
+  function answeredCount() { let n = 0; S.mock.ids.forEach(id => { const st = QS.get(id); st.q.parts.forEach((p, pi) => { const a = st.ans[pi]; if (a !== undefined && a !== '' && a !== null) n++; }); }); return n; }
+  function buildMock() {
+    const qs = G.mock(S.mock.seed); S.mock.ids = qs.map(q => makeQ(q, 'mock'));
+    S.mock.ids.forEach((id, i) => { const saved = (S.mock.ans || {})[i]; if (saved) QS.get(id).ans = saved; });
+    if (S.mock.done) { S.mock.ids.forEach((id, i) => { gradeQSilent(id); const r = (S.mock.res || {})[i]; if (r) { Object.values(r).forEach(x => { if (x && x.status === 'grading') x.status = 'err'; }); QS.get(id).res = r; } }); }
+  }
+  function gradeQSilent(id) { const st = QS.get(id); st.graded = true; }
+  function persistMock() { if (!S.mock) return; const ans = {}, res = {}; S.mock.ids.forEach((id, i) => { ans[i] = QS.get(id).ans; res[i] = QS.get(id).res; }); lsSet(LS_MOCK, { seed: S.mock.seed, start: S.mock.start, done: S.mock.done, ans, res, score: S.mock.score, min: S.mock.min }); }
+  async function submitMock() {
+    const textItems = [];
+    S.mock.ids.forEach(id => { gradeQ(id, 'mock').forEach(pi => textItems.push({ id, pi })); });
+    S.mock.done = true; S.mock.min = Math.max(1, Math.min(MOCK_MIN, Math.round((Date.now() - S.mock.start) / 60000)));
+    render(); window.scrollTo({ top: 0 });
+    if (textItems.length && S.sample) await claudeGrade(textItems);
+    finalizeMock(); render();
+  }
+  function finalizeMock() {
+    let a = 0, b = 0; const per = {};
+    S.mock.ids.forEach((id, i) => { const st = QS.get(id); let qa = 0, qb = 0; st.q.parts.forEach((p, pi) => { const w = p.pts || 1; qb += w; qa += w * ((st.res[pi] && st.res[pi].sc) || 0); }); per[i + 1] = qb ? qa / qb : 0; a += qa; b += qb; });
+    S.mock.score = b ? a / b : 0; S.mock.per = per;
+    const t = S.mock.start; const ex = S.prog.mocks.find(m => m.t === t);
+    if (ex) { ex.sc = S.mock.score; ex.per = per; } else S.prog.mocks.push({ t, sc: S.mock.score, per, min: S.mock.min });
+    persistMock(); save();
+  }
+  function mockResults() {
+    finalizeMockQuiet();
+    const per = S.mock.per || {}, names = ['Best model + forecast', 'Seasonality', 'ACF/PACF + Ljung-Box', 'Demand & elasticities', 'Lag operator', 'Explain (Q6-style)', 'Explain (Q7-style)'];
+    const pending = S.mock.ids.some(id => Object.values(QS.get(id).res).some(r => r.status === 'grading'));
+    const self = S.mock.ids.some(id => Object.values(QS.get(id).res).some(r => r.status === 'self' || r.status === 'err'));
+    const weak = Object.entries(per).filter(([, v]) => v < 0.7).map(([k]) => names[k - 1]);
+    return `<section class="results"><div class="resgrid">${ring(S.mock.score || 0, 'score')}<div><h1>Mock results</h1><p class="muted">${S.mock.min} minutes. ${pending ? '<span class="spin"></span> Claude is still grading the written answers; the score will update.' : self ? 'Tick the key points you covered in each written answer below; the score updates as you tick.' : 'All parts graded.'}</p>
+      <table class="mini res"><tr><th>Question</th><th>Score</th></tr>${names.map((n, i) => `<tr><td>Q${i + 1} ${n}</td><td><span class="bar inline"><span class="${(per[i + 1] || 0) >= 0.8 ? 'lv-solid' : (per[i + 1] || 0) >= 0.5 ? 'lv-mid' : 'lv-weak'}" style="width:${Math.max(3, (per[i + 1] || 0) * 100)}%"></span></span> ${pct(per[i + 1] || 0)}</td></tr>`).join('')}</table>
+      ${weak.length ? `<p><b>Work on:</b> ${weak.join(', ')}. Each question below shows the right answers and why.</p>` : ''}</div></div></section>`;
+  }
+  function finalizeMockQuiet() { let a = 0, b = 0; const per = {}; S.mock.ids.forEach((id, i) => { const st = QS.get(id); let qa = 0, qb = 0; st.q.parts.forEach((p, pi) => { const w = p.pts || 1; qb += w; qa += w * ((st.res[pi] && st.res[pi].sc) || 0); }); per[i + 1] = qb ? qa / qb : 0; a += qa; b += qb; }); S.mock.score = b ? a / b : 0; S.mock.per = per; }
+
+  // ----- old exam -----
+  function oldView() {
+    if (!S.old) { S.old = { ids: C.oldExam().map(q => makeQ(q, 'old')) }; }
+    return `<section><h1>Kamp's old Exam 1</h1><p class="muted">The real questions with Kamp's real printouts and graphs. Check each question on its own; written parts are graded by Claude${S.sample ? '' : ' or by you against the key points'}. The last set is the actual ACF/PACF graphs from the 10/13 and 10/15 lectures, for the handwritten note.</p></section>
+    ${S.old.ids.map(id => { const st = QS.get(id); return qHTML(id, { footer: st.graded ? `<div class="qfoot"><b>${pct(qScore(id))}</b> on this question. <button class="btn ghost" data-act="oldreset" data-q="${id}">Try again</button></div>${askBox(id)}` : `<div class="qfoot"><button class="btn" data-act="check" data-q="${id}">Check this question</button></div>` }); }).join('')}`;
+  }
+
+  // ---------- events ----------
+  document.addEventListener('click', async e => {
+    const b = e.target.closest('[data-act]'); if (!b) return;
+    const act = b.dataset.act, id = b.dataset.q;
+    if (act === 'nav') { if (b.dataset.v === 'lessons') S.lesson = null; if (b.dataset.v === 'drills') S.drill = null; go(b.dataset.v); }
+    else if (act === 'lessons') go('lessons', { lesson: null });
+    else if (act === 'lesson') go('lessons', { lesson: b.dataset.l });
+    else if (act === 'drills') go('drills', { drill: null });
+    else if (act === 'drill') go('drills', { drill: { id: b.dataset.d, qid: null, n: 0, sum: 0 } });
+    else if (act === 'next') { newDrillQ(); render(); window.scrollTo({ top: 0 }); }
+    else if (act === 'mc') { const st = QS.get(id); if (st.graded) return; st.ans[+b.dataset.p] = +b.dataset.i; rerenderPart(id, +b.dataset.p); if (st.mode === 'mock') persistMock(); }
+    else if (act === 'check') {
+      const st = QS.get(id), textIdx = gradeQ(id, st.mode);
+      if (st.mode === 'lesson') { const l = C.LESSONS.find(x => x.id === S.lessonQ.lid); const sc = qScore(id); const prev = S.prog.lessons[l.id]; if (!prev || sc >= (prev.sc || 0)) S.prog.lessons[l.id] = { t: Date.now(), sc }; }
+      if (st.mode === 'drill') { S.drill.n++; }
+      save(); render();
+      if (textIdx.length && S.sample) { await claudeGrade(textIdx.map(pi => ({ id, pi }))); }
+      if (st.mode === 'drill') { S.drill.sum += qScore(id); }
+      if (st.mode === 'old') { S.prog.olds.push({ t: Date.now(), sc: qScore(id), q: st.q.num }); save(); }
+      render();
+    }
+    else if (act === 'ask') ask(id);
+    else if (act === 'oldreset') { const st = QS.get(id); st.graded = false; st.res = {}; render(); }
+    else if (act === 'mockstart') { S.mock = { seed: newSeed(), start: Date.now(), done: false, ans: {} }; buildMock(); persistMock(); render(); window.scrollTo({ top: 0 }); }
+    else if (act === 'mocksubmit') { const n = answeredCount(), tot = S.mock.ids.reduce((s, i) => s + QS.get(i).q.parts.length, 0); if (n < tot && !b.dataset.sure) { b.dataset.sure = '1'; b.textContent = `${tot - n} parts blank. Submit anyway?`; return; } submitMock(); }
+    else if (act === 'mocknew') { lsDel(LS_MOCK); S.mock = null; render(); window.scrollTo({ top: 0 }); }
+  });
+  document.addEventListener('input', e => {
+    const t = e.target;
+    if (t.matches('[data-num],[data-text]')) { const st = QS.get(t.dataset.q); if (st && !st.graded) { st.ans[+t.dataset.p] = t.value; if (st.mode === 'mock') { clearTimeout(t._pt); t._pt = setTimeout(persistMock, 400); } } }
+  });
+  document.addEventListener('change', e => {
+    const t = e.target;
+    if (t.matches('[data-self]')) { selfGrade(t.dataset.q, +t.dataset.p); if (S.view === 'mock' && S.mock && S.mock.done) { finalizeMock(); const r = document.querySelector('.results'); if (r) r.outerHTML = mockResults(); } }
+  });
+  document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target.matches('.askin')) { const id = e.target.id.replace('askq-', ''); ask(id); } });
+
+  setInterval(() => {
+    const cd = $('#cd'); if (cd) cd.textContent = countdown();
+    const tm = $('#timer'); if (tm && S.mock && !S.mock.done) { const left = S.mock.start + MOCK_MIN * 60000 - Date.now(); tm.textContent = fmtLeft(left); tm.classList.toggle('low', left < 600000); }
+  }, 1000);
+
+  const v = lsGet(LS_VIEW); if (v && NAV.some(n => n[0] === v)) S.view = v;
+  render();
+  connect();
+})();
+
+</script>
+</body>
+</html>
